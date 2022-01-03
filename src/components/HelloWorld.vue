@@ -1,5 +1,6 @@
 <template>
 	<v-container>
+		<p class="red-color">커스텀 SCSS 변수 테스트</p>
 		<v-row class="text-center">
 			<v-col cols="12">
 				<v-img
@@ -133,3 +134,9 @@ export default {
 	}),
 };
 </script>
+
+<style lang="scss">
+.red-color {
+	color: $red-color;
+}
+</style>
