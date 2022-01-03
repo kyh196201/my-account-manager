@@ -3,4 +3,6 @@ module.exports = {
 		overlay: false,
 		open: true,
 	},
+
+	transpileDependencies: ['vuetify'],
 };
