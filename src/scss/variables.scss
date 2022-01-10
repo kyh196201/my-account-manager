@@ -1,1 +1,8 @@
-$red-color: #f03e3e;
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Poppins:wght@400;500;700&display=swap');
+
+// Fonts
+$noto: 'Noto Sans KR', sans-serif;
+$poppins: 'Poppins', sans-serif;
+
+// Vuetify Globals Vuetify에 자동으로 오버라이드 됨
+$body-font-family: 'Poppins', $noto;
