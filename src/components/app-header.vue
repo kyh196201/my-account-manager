@@ -6,6 +6,10 @@
 		}"
 	>
 		헤더
+		<div>
+			<router-link to="/login">로그인하기</router-link>
+			<router-link to="/home">홈 페이지로</router-link>
+		</div>
 	</header>
 </template>
 
