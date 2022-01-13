@@ -6,7 +6,7 @@
 			:style="{ 'background-color': themeColor }"
 		>
 			<nav class="home__nav">
-				<navList></navList>
+				<nav-list></nav-list>
 			</nav>
 
 			<!-- 수입, 지출, 합계 -->
