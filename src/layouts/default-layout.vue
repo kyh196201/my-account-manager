@@ -1,13 +1,36 @@
 <template>
-	<div>
-		<header class="header">헤더</header>
-		<slot></slot>
-		<div class="dock-bar">독바 영역</div>
+	<div class="container">
+		<app-header></app-header>
+		<div class="wrapper">
+			<slot></slot>
+		</div>
+		<dock-bar></dock-bar>
 	</div>
 </template>
 
 <script>
-export default {};
+// components
+import appHeader from '@/components/app-header.vue';
+import dockBar from '@/components/dock-bar.vue';
+
+export default {
+	components: {
+		appHeader,
+		dockBar,
+	},
+};
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.container {
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+
+	.wrapper {
+		flex: 1 1 auto;
+		overflow: hidden;
+		height: 0px;
+	}
+}
+</style>

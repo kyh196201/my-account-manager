@@ -1,0 +1,38 @@
+// Reference1: https://nykim.work/84
+// Reference2: https://chaewonkong.github.io/posts/scss-media-query.html
+// Break Point
+$mobile-small: 375px;
+$mobile: 425px;
+$tablet: 768px;
+$labtop-small: 880px;
+$labtop: 1024px;
+$desktop: 1400px;
+
+// Reference: https://13akstjq.github.io/sass/2020/02/22/useful-sass-mixin.html
+@mixin ellipsis($line: 1) {
+    @if ($line == 1) {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    } @else {
+      display: -webkit-box;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: $line;
+    }
+}
+
+@mixin clearfix {
+    &:after {
+        content: '';
+        display: block;
+        clear: both;
+    }
+}
+
+@mixin flexBox($align: center, $justify: center) {
+    display: flex;
+    align-items: $align;
+    justify-content: $justify;
+}

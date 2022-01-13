@@ -5,6 +5,8 @@ import store from './store';
 import vuetify from './plugins/vuetify';
 import VueCompositionAPI from '@vue/composition-api';
 
+import '@/scss/_index.scss';
+
 Vue.use(VueCompositionAPI);
 
 Vue.config.productionTip = false;

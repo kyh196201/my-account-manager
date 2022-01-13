@@ -6,18 +6,18 @@ Vue.use(VueRouter);
 const routes = [
 	{
 		path: '/',
-		name: 'HomePage',
+		name: 'Home',
 		component: () => import('@/views/home-page.vue'),
 	},
 	{
 		path: '/login',
-		name: 'LoginPage',
+		name: 'Login',
 		component: () => import('@/views/login-page.vue'),
 	},
 	{
 		path: '*',
 		name: 'NotFound',
-		component: () => import('@/views/not-found-page.vue'),
+		component: () => import('@/views/not-found.vue'),
 	},
 ];
 
