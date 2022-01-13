@@ -6,8 +6,26 @@ Vue.use(VueRouter);
 const routes = [
 	{
 		path: '/',
+		redirect: {
+			name: 'Home',
+		},
+	},
+	{
+		path: '/home',
 		name: 'Home',
 		component: () => import('@/views/home-page.vue'),
+		children: [
+			{
+				path: '',
+				name: 'Daily',
+				component: () => import('@/views/daily-page.vue'),
+			},
+			{
+				path: 'calendar',
+				name: 'Calendar',
+				component: () => import('@/views/calendar-page.vue'),
+			},
+		],
 	},
 	{
 		path: '/login',

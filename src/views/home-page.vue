@@ -28,7 +28,10 @@
 		<!-- #endregion -->
 
 		<div class="home__content">
-			<router-view></router-view>
+			<!-- https://kr.vuejs.org/v2/guide/transitions.html#%ED%8A%B8%EB%9E%9C%EC%A7%80%EC%85%98-%EB%AA%A8%EB%93%9C -->
+			<transition name="fade" mode="out-in">
+				<router-view></router-view>
+			</transition>
 		</div>
 	</section>
 </template>
@@ -112,5 +115,14 @@ export default {
 		overflow-y: auto;
 		height: 0px;
 	}
+}
+
+// transition
+.fade-enter-active,
+.fade-leave-active {
+	transition: opacity 0.2s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+	opacity: 0;
 }
 </style>

@@ -18,11 +18,11 @@ export default {
 		const routes = ref([
 			{
 				name: '일일',
-				path: '/home/daily',
+				path: '/home',
 			},
 			{
 				name: '달력',
-				path: '/home/daily',
+				path: '/home/calendar',
 			},
 			{
 				name: '주별',
@@ -62,7 +62,7 @@ export default {
 	text-align: center;
 	color: rgba($white-color, 0.7);
 
-	&.active {
+	&.router-link-exact-active {
 		color: $white-color;
 
 		&::after {
