@@ -5,7 +5,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
 	state: {
-		themeColor: '#00c471',
+		themeColor: '#809bce',
 	},
 	mutations: {},
 	actions: {},

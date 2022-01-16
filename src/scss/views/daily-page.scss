@@ -1,0 +1,11 @@
+.daily-page {
+  &__inner {
+    padding: 1rem;
+  }
+
+  &__item {
+    margin-bottom: 1rem;
+    box-shadow: rgb(0 0 0 / 12%) 0rem 0.1rem 0.3rem, rgb(0 0 0 / 24%) 0rem 0.1rem 0.2rem;
+    border-radius: 0.5rem;
+  }
+}

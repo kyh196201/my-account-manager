@@ -1,16 +1,14 @@
 <template>
 	<section class="home">
 		<!-- #region 헤더 -->
-		<header
-			class="home__header"
-			:style="{ 'background-color': themeColor }"
-		>
-			<nav class="home__nav">
+		<header class="home__header">
+			<nav class="home__nav" :style="{ 'background-color': themeColor }">
 				<nav-list></nav-list>
 			</nav>
 
 			<!-- 수입, 지출, 합계 -->
 			<div class="home__counter">
+				<!-- TODO 컴포넌트로 분리하기 -->
 				<div class="counter__box">
 					<span class="counter__title">수입</span>
 					<strong class="counter__ammount income">0</strong>
@@ -79,7 +77,7 @@ export default {
 	&__counter {
 		display: flex;
 		background-color: $white-color;
-		border: 0.1rem solid #ddd;
+		box-shadow: rgba(17, 17, 26, 0.1) 0rem 0.1rem 0rem;
 		border-left: none;
 		border-right: none;
 		color: $black-color;
@@ -95,7 +93,7 @@ export default {
 				display: block;
 				margin-top: 0.5rem;
 				font-weight: 700;
-				font-size: 1.1em;
+				font-size: 1.2em;
 				@include ellipsis(1);
 
 				&.income {
