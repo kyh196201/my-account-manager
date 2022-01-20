@@ -7,6 +7,8 @@
 </template>
 
 <script>
+import { provide } from '@vue/composition-api';
+
 import AppLayout from '@/layouts/app-layout.vue';
 
 export default {
@@ -19,6 +21,11 @@ export default {
 	data: () => ({
 		//
 	}),
+
+	setup(_, { root }) {
+		// https://stackoverflow.com/questions/68848942/how-to-call-a-custom-global-function-using-composition-api-vue3
+		provide('$dayjs', root.$dayjs);
+	},
 };
 </script>
 

@@ -3,7 +3,7 @@
 		<!-- #region 헤더 -->
 		<header class="home__header">
 			<nav class="home__nav" :style="{ 'background-color': themeColor }">
-				<nav-list></nav-list>
+				<NavList></NavList>
 			</nav>
 
 			<!-- 수입, 지출, 합계 -->
@@ -38,13 +38,13 @@
 import { ref, computed } from '@vue/composition-api';
 
 // components
-import navList from '../components/home/nav-list.vue';
+import NavList from '../components/home/nav-list.vue';
 
 export default {
 	name: 'HomePage',
 
 	components: {
-		navList,
+		NavList,
 	},
 
 	setup(props, { root }) {

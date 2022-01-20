@@ -5,9 +5,13 @@ import store from './store';
 import vuetify from './plugins/vuetify';
 import VueCompositionAPI from '@vue/composition-api';
 
+// plugins
+import VueDayjs from '@/plugins/dayjs';
+
 import '@/scss/_index.scss';
 
 Vue.use(VueCompositionAPI);
+Vue.use(VueDayjs);
 
 Vue.config.productionTip = false;
 

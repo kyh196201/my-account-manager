@@ -1,7 +1,7 @@
 <template>
 	<div class="daily-transaction">
 		<div class="daily-transaction__summary">
-			<span class="daily-transaction__date"> 2022.01.15 토요일 </span>
+			<span class="daily-transaction__date"> {{ dateString }} </span>
 			<strong class="daily-transaction__const income">
 				{{ totalIncome }}원
 			</strong>
@@ -11,18 +11,11 @@
 		</div>
 		<div class="daily-transaction__detail">
 			<ul class="daily-transaction__list">
-				<li>
-					<div class="transaction income">
-						<span class="transaction__title">식비</span>
-						<div class="transaction__detail">
-							<span class="transaction__method">현금</span>
-							<span class="transaction__desc">붕어빵 사먹음</span>
-							<span class="transaction__timestamp">
-								오후 11:14
-							</span>
-						</div>
-						<strong class="transaction__cost">18040원</strong>
-					</div>
+				<li
+					v-for="(transaction, index) in transactionList"
+					:key="`transaction-${index}`"
+				>
+					<Transaction v-bind="transaction"></Transaction>
 				</li>
 			</ul>
 		</div>
@@ -30,73 +23,81 @@
 </template>
 
 <script>
-import { ref, computed } from '@vue/composition-api';
+import { computed, inject, toRefs } from '@vue/composition-api';
 
-const TRANSACTION_TYPE = {
-	INCOME: 'income', // 수입
-	OUTCOME: 'outcome', // 지출
-};
+// constants
+import { TRANSACTION_TYPE } from '@/constants';
 
-const mockData = {
-	date: '2022-01-15',
-	transactionList: [
-		{
-			category: '식비',
-			method: '현금',
-			description: '붕어빵',
-			cost: '8050',
-			type: TRANSACTION_TYPE.OUTCOME,
-		},
-		{
-			category: '식비',
-			method: '카드',
-			description: '점심 식비',
-			cost: '10000',
-			type: TRANSACTION_TYPE.OUTCOME,
-		},
-	],
-};
+// utils
+import { numberWithCommas } from '@/utils/filter';
+
+import Transaction from '@/components/daily-page/transaction.vue';
 
 export default {
 	name: 'DailyTransaction',
 
-	setup() {
-		const data = ref(mockData);
+	components: {
+		Transaction,
+	},
 
-		// 총 지출 금액
+	props: {
+		// 소비/지출 날짜
+		date: {
+			type: String,
+			default: '',
+			required: true,
+		},
+
+		// 소비/지출 내역
+		transactionList: {
+			type: Array,
+			default: () => [],
+			required: true,
+		},
+	},
+
+	setup(props) {
+		const $dayjs = inject('$dayjs');
+
+		const { date } = toRefs(props);
+
+		// 총 지출
 		const totalOutcome = computed(() => {
-			const transactionList = data.value.transactionList;
 			let total = 0;
 
-			for (let i = 0; i < transactionList.length; i++) {
-				const transaction = transactionList[i];
+			for (let i = 0; i < props.transactionList.length; i++) {
+				const transaction = props.transactionList[i];
 				if (transaction.type === TRANSACTION_TYPE.OUTCOME) {
 					total += transaction.cost;
 				}
 			}
 
-			return total;
+			return numberWithCommas(total);
 		});
 
-		// 총 수입 금액
+		// 총 수입
 		const totalIncome = computed(() => {
-			const transactionList = data.value.transactionList;
 			let total = 0;
 
-			for (let i = 0; i < transactionList.length; i++) {
-				const transaction = transactionList[i];
+			for (let i = 0; i < props.transactionList.length; i++) {
+				const transaction = props.transactionList[i];
 				if (transaction.type === TRANSACTION_TYPE.INCOME) {
 					total += transaction.cost;
 				}
 			}
 
-			return total;
+			return numberWithCommas(total);
 		});
 
+		// 연-월-일
+		const dateString = computed(() =>
+			$dayjs(date.value).format('YYYY-MM-DD'),
+		);
+
 		return {
-			data,
 			totalOutcome,
 			totalIncome,
+			dateString,
 		};
 	},
 };
@@ -114,12 +115,12 @@ export default {
 	}
 
 	&__date {
-		width: 60%;
+		width: 40%;
 		color: $gray-7;
 	}
 
 	&__const {
-		flex: 1 1 20%;
+		flex: 1 1 30%;
 		text-align: right;
 		font-weight: 500;
 		font-size: 1.7rem;
@@ -130,52 +131,6 @@ export default {
 
 		&.outcome {
 			color: $red-color;
-		}
-	}
-
-	&__detail {
-		.transaction {
-			@include flexBox(center, space-between);
-			padding: 0.75rem 1rem;
-			color: $gray-7;
-
-			&__title,
-			&__cost {
-				width: 25%;
-			}
-
-			&__detail {
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
-				width: 50%;
-			}
-
-			&__cost {
-				text-align: right;
-				font-size: 1.7rem;
-				font-weight: 500;
-			}
-
-			&__desc {
-				font-weight: bolder;
-			}
-
-			&.income {
-				.transaction {
-					&__cost {
-						color: $blue-color;
-					}
-				}
-			}
-
-			&.outcome {
-				.transaction {
-					&__cost {
-						color: $red-color;
-					}
-				}
-			}
 		}
 	}
 }
