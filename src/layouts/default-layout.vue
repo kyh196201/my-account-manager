@@ -21,16 +21,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.container {
-	display: flex;
-	flex-direction: column;
-	height: 100vh;
-
-	.wrapper {
-		flex: 1 1 auto;
-		overflow: hidden;
-		height: 0px;
-	}
-}
-</style>
+<style lang="scss" scoped></style>

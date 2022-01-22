@@ -1,0 +1,75 @@
+.home {
+	display: flex;
+	position: relative;
+	flex-direction: column;
+	height: 100%;
+	font-size: 1.5rem;
+
+	// 헤더
+	&__header {
+		color: $white-color;
+	}
+
+	&__counter {
+		display: flex;
+		background-color: $white-color;
+		box-shadow: rgba(17, 17, 26, 0.1) 0rem 0.1rem 0rem;
+		border-left: none;
+		border-right: none;
+		color: $black-color;
+
+		.counter {
+			&__box {
+				width: 33.33%;
+				padding: 0.5rem 1rem;
+				text-align: center;
+			}
+
+			&__ammount {
+				display: block;
+				margin-top: 0.5rem;
+				font-weight: 700;
+				font-size: 1.2em;
+				@include ellipsis(1);
+
+				&.income {
+					color: $blue-color;
+				}
+
+				&.outcome {
+					color: $red-color;
+				}
+			}
+		}
+	}
+
+	// 컨텐츠
+	&__content {
+		flex: 1 1 auto;
+		overflow-y: auto;
+		height: 0px;
+	}
+
+	&__plus-btn {
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		width: 5rem !important;
+		height: 5rem !important;
+		margin: 0 1rem 1rem 0;
+		background-color: $blue-color;
+
+		i {
+			font-size: 2rem !important;
+		}
+	}
+}
+
+// transition
+.fade-enter-active,
+.fade-leave-active {
+	transition: opacity 0.3s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+	opacity: 0;
+}

@@ -31,6 +31,22 @@
 				<router-view></router-view>
 			</transition>
 		</div>
+
+		<v-btn
+			icon
+			fab
+			elevation="2"
+			color="white"
+			class="home__plus-btn"
+			@click="modalOpen = true"
+		>
+			<v-icon small>fas fa-plus</v-icon>
+		</v-btn>
+
+		<AddTransaction
+			v-if="modalOpen"
+			@close="modalOpen = false"
+		></AddTransaction>
 	</section>
 </template>
 
@@ -40,87 +56,32 @@ import { ref, computed } from '@vue/composition-api';
 // components
 import NavList from '../components/home/nav-list.vue';
 
+// modals
+import AddTransaction from '../components/home/add-transaction.vue';
+
 export default {
 	name: 'HomePage',
 
 	components: {
 		NavList,
+		AddTransaction,
 	},
 
 	setup(props, { root }) {
+		// 메인 컬러
 		const themeColor = computed(() => root.$store.getters.themeColor);
 
-		const message = ref('hello');
-
-		console.log(themeColor);
+		// 입력 모달 open
+		const modalOpen = ref(false);
 
 		return {
-			message,
 			themeColor,
+			modalOpen,
 		};
 	},
 };
 </script>
 
 <style lang="scss" scoped>
-.home {
-	display: flex;
-	flex-direction: column;
-	height: 100%;
-	font-size: 1.5rem;
-
-	// 헤더
-	&__header {
-		color: $white-color;
-	}
-
-	&__counter {
-		display: flex;
-		background-color: $white-color;
-		box-shadow: rgba(17, 17, 26, 0.1) 0rem 0.1rem 0rem;
-		border-left: none;
-		border-right: none;
-		color: $black-color;
-
-		.counter {
-			&__box {
-				width: 33.33%;
-				padding: 0.5rem 1rem;
-				text-align: center;
-			}
-
-			&__ammount {
-				display: block;
-				margin-top: 0.5rem;
-				font-weight: 700;
-				font-size: 1.2em;
-				@include ellipsis(1);
-
-				&.income {
-					color: $blue-color;
-				}
-
-				&.outcome {
-					color: $red-color;
-				}
-			}
-		}
-	}
-
-	// 컨텐츠
-	&__content {
-		flex: 1 1 auto;
-		overflow-y: auto;
-		height: 0px;
-	}
-}
-
-// transition
-.fade-enter-active,
-.fade-leave-active {
-	transition: opacity 0.3s;
-}
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-	opacity: 0;
-}
+@import '@/scss/views/home-page.scss';
 </style>

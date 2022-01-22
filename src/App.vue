@@ -1,9 +1,11 @@
 <template>
-	<app-layout>
-		<transition name="fade" mode="out-in">
-			<router-view></router-view>
-		</transition>
-	</app-layout>
+	<v-app>
+		<app-layout>
+			<transition name="fade" mode="out-in">
+				<router-view></router-view>
+			</transition>
+		</app-layout>
+	</v-app>
 </template>
 
 <script>
