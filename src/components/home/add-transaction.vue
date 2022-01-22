@@ -1,31 +1,102 @@
 <template>
 	<v-dialog
-		v-model="open"
+		v-model="dialog"
 		fullscreen
 		hide-overlay
 		transition="dialog-bottom-transition"
 	>
 		<section class="add-transaction">
-			<header class="add-transaction__header">
-				<v-btn icon @click="$emit('close')" color="white">
+			<header
+				class="add-transaction__header"
+				:style="{ 'background-color': themeColor }"
+			>
+				<button @click="$emit('close')" class="add-transaction__button">
 					<v-icon>fas fa-times</v-icon>
-				</v-btn>
+				</button>
 				<h2 class="add-transaction__title">수입/지출/이체</h2>
+				<div class="add-transaction__buttons">
+					<button class="add-transaction__button">
+						<v-icon>fas fa-microphone</v-icon>
+					</button>
+				</div>
 			</header>
 			<div class="add-transaction__content">
+				<ul class="add-transaction__tabs">
+					<li
+						v-for="(item, index) in transactionTypeList"
+						:key="`nav-item-${index}`"
+						class="add-transaction__tab"
+					>
+						<label
+							class="tab"
+							:class="[item.value, tabActiveClass(item.value)]"
+						>
+							<span class="tab__title">{{ item.text }}</span>
+							<input
+								type="radio"
+								v-model="transactionType"
+								:value="item.value"
+							/>
+						</label>
+					</li>
+				</ul>
 				<!-- 폼 -->
+				<TransactionForm
+					:transaction-type="transactionType"
+				></TransactionForm>
 			</div>
 		</section>
 	</v-dialog>
 </template>
 
 <script>
+import { computed, ref } from '@vue/composition-api';
+
+// components
+import TransactionForm from './transaction-form.vue';
+
+import { TRANSACTION_TYPE } from '@/constants';
+
 export default {
 	name: 'AddTransaction',
 
-	data() {
+	components: {
+		TransactionForm,
+	},
+
+	setup() {
+		const dialog = ref(true);
+
+		// 거래 타입 리스트
+		const transactionTypeList = [
+			{
+				value: TRANSACTION_TYPE.INCOME,
+				text: '수입',
+			},
+			{
+				value: TRANSACTION_TYPE.OUTCOME,
+				text: '지출',
+			},
+			{
+				value: TRANSACTION_TYPE.TRANSFER,
+				text: '이체',
+			},
+		];
+
+		// 선택된 거래 타입
+		const transactionType = ref(TRANSACTION_TYPE.INCOME);
+
+		// 탭 active 클래스
+		const tabActiveClass = computed(() => {
+			return value => (value === transactionType.value ? 'active' : '');
+		});
+
 		return {
-			open: true,
+			dialog,
+
+			transactionTypeList,
+			transactionType,
+			tabActiveClass,
 		};
 	},
 };
@@ -39,12 +110,85 @@ export default {
 	background-color: $white-color;
 
 	&__header {
-		padding: $side-padding;
-		background-color: #809bce;
+		display: flex;
+		align-items: center;
+		padding: 1rem;
+		color: $white-color;
+		box-shadow: rgba(0, 0, 0, 0.24) 0 0.3rem 0.8rem;
+	}
+
+	&__title {
+		font-size: 2rem;
+	}
+
+	&__buttons {
+		margin-left: auto;
+	}
+
+	&__button {
+		padding: 1rem;
+		color: inherit;
+
+		i {
+			font-size: 2rem;
+			color: inherit;
+		}
 	}
 
 	&__content {
 		flex: 1;
+		padding: 2rem;
+	}
+
+	&__tabs {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-bottom: 2rem;
+		padding: 0;
+	}
+
+	&__tab {
+		flex: 1 1;
+		width: calc((100% - 2rem) / 3);
+
+		&:not(:last-child) {
+			margin-right: 1rem;
+		}
+
+		.tab {
+			display: block;
+			padding: 1rem;
+			text-align: center;
+			font-size: 1.5rem;
+			border: 0.15rem solid $gray-5;
+			background-color: $gray-1;
+			border-radius: 0.4rem;
+			transition: background-color 0.2s, color 0.2s;
+
+			input {
+				display: none;
+			}
+
+			&.active {
+				background-color: $white-color;
+				border-color: $red-color;
+				color: $red-color;
+				font-weight: 600;
+
+				// 수입
+				&.income {
+					border-color: $blue-color;
+					color: $blue-color;
+				}
+
+				// 이체
+				&.transfer {
+					border-color: $black-color;
+					color: $black-color;
+				}
+			}
+		}
 	}
 }
 </style>

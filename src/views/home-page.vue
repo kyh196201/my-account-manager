@@ -39,6 +39,9 @@
 			color="white"
 			class="home__plus-btn"
 			@click="modalOpen = true"
+			:style="{
+				'background-color': themeColorDark,
+			}"
 		>
 			<v-icon small>fas fa-plus</v-icon>
 		</v-btn>
@@ -69,7 +72,7 @@ export default {
 
 	setup() {
 		// 입력 모달 open
-		const modalOpen = ref(false);
+		const modalOpen = ref(true);
 
 		return {
 			modalOpen,

@@ -6,6 +6,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
 	state: {
 		themeColor: '#809bce',
+		themeColorDark: '#364fc7',
 	},
 	mutations: {},
 	actions: {},
@@ -13,6 +14,10 @@ export default new Vuex.Store({
 	getters: {
 		themeColor(state) {
 			return state.themeColor;
+		},
+
+		themeColorDark(state) {
+			return state.themeColorDark;
 		},
 	},
 });

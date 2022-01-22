@@ -3,7 +3,6 @@
 	position: relative;
 	flex-direction: column;
 	height: 100%;
-	font-size: 1.5rem;
 
 	// 헤더
 	&__header {
@@ -57,7 +56,7 @@
 		width: 5rem !important;
 		height: 5rem !important;
 		margin: 0 1rem 1rem 0;
-		background-color: $blue-color;
+		// background-color: $blue-color;
 
 		i {
 			font-size: 2rem !important;
