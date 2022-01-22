@@ -8,10 +8,14 @@ import VueCompositionAPI from '@vue/composition-api';
 // plugins
 import VueDayjs from '@/plugins/dayjs';
 
+// mixins
+import globalMixin from '@/mixins/global';
+
 import '@/scss/_index.scss';
 
 Vue.use(VueCompositionAPI);
 Vue.use(VueDayjs);
+Vue.mixin(globalMixin);
 
 Vue.config.productionTip = false;
 

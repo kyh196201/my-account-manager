@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { ref, computed } from '@vue/composition-api';
+import { ref } from '@vue/composition-api';
 
 // components
 import NavList from '../components/home/nav-list.vue';
@@ -67,15 +67,11 @@ export default {
 		AddTransaction,
 	},
 
-	setup(props, { root }) {
-		// 메인 컬러
-		const themeColor = computed(() => root.$store.getters.themeColor);
-
+	setup() {
 		// 입력 모달 open
 		const modalOpen = ref(false);
 
 		return {
-			themeColor,
 			modalOpen,
 		};
 	},
