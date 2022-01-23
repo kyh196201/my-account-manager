@@ -172,20 +172,20 @@ export default {
 
 			&.active {
 				background-color: $white-color;
-				border-color: $red-color;
-				color: $red-color;
+				border-color: $outcome-color;
+				color: $outcome-color;
 				font-weight: 600;
 
 				// 수입
 				&.income {
-					border-color: $blue-color;
-					color: $blue-color;
+					border-color: $income-color;
+					color: $income-color;
 				}
 
 				// 이체
 				&.transfer {
-					border-color: $black-color;
-					color: $black-color;
+					border-color: $transfer-color;
+					color: $transfer-color;
 				}
 			}
 		}

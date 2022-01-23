@@ -26,6 +26,7 @@ import { TRANSACTION_TYPE } from '@/constants';
 
 const data = [
 	{
+		// NOTE(01-23) https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString
 		timestamp: new Date().toISOString(),
 		category: '식비',
 		method: '현금',
@@ -53,6 +54,7 @@ export default {
 	setup() {
 		const transactionList = ref([]);
 
+		// NOTE(01-23)
 		// https://stackoverflow.com/questions/46802448/how-do-i-group-items-in-an-array-by-date
 		// this gives an object with dates as keys
 		const groups = data.reduce((groups, transaction) => {
