@@ -1,59 +1,70 @@
 <template>
-	<form class="transaction-form form" :class="[transactionType]">
-		<fieldset>
+	<form
+		class="transaction-form form"
+		:class="[transactionType]"
+		@submit.prevent="handleSubmit()"
+	>
+		<fieldset class="transaction-form__fieldset">
 			<legend class="sr-only">거래 내역 상세</legend>
 
 			<!-- 날짜 -->
 			<div class="form-control">
 				<label class="form-control__label"> 날짜 </label>
 				<div class="form-control__box">
-					<input type="text" value="날짜" />
+					<input type="text" v-model="date" />
 				</div>
 			</div>
 			<!-- 자산 -->
 			<div class="form-control">
 				<label class="form-control__label"> 자산 </label>
 				<div class="form-control__box">
-					<input type="text" value="현금" />
+					<input type="text" v-model="method" />
 				</div>
 			</div>
 			<!-- 분류 -->
 			<div class="form-control">
 				<label class="form-control__label"> 분류 </label>
 				<div class="form-control__box">
-					<input type="text" value="현금" />
+					<input type="text" v-model="category" />
 				</div>
 			</div>
 			<!-- 금액 -->
 			<div class="form-control">
 				<label class="form-control__label"> 금액 </label>
 				<div class="form-control__box">
-					<BaseInput v-model="cost"></BaseInput>
+					<BaseInput
+						v-model="computedCost"
+						@keyup="handleKeyupCost($event)"
+					></BaseInput>
 				</div>
 			</div>
 			<!-- 내용 -->
 			<div class="form-control">
 				<label class="form-control__label"> 내용 </label>
 				<div class="form-control__box">
-					<input type="text" value="현금" />
+					<input type="text" v-model="description" />
 				</div>
 			</div>
 		</fieldset>
 
-		<fieldset>
+		<fieldset class="transaction-form__fieldset">
 			<legend class="sr-only">거래 내역 부가 정보</legend>
 			<div class="form-control">
 				<label class="form-control__label"> 메모 </label>
 				<div class="form-control__box">
-					<input type="text" value="사진" />
+					<input type="text" v-model="memo" />
 				</div>
 			</div>
 		</fieldset>
+
+		<button type="submit" class="transaction-form__submit">
+			<span>저장하기</span>
+		</button>
 	</form>
 </template>
 
 <script>
-import { reactive, computed } from '@vue/composition-api';
+import { reactive, computed, toRefs } from '@vue/composition-api';
 
 // components
 import BaseInput from '@/components/common/base-input.vue';
@@ -79,27 +90,62 @@ export default {
 
 	setup() {
 		const state = reactive({
-			cost: '123',
+			date: '',
+			times: '',
+			category: '',
+			method: '',
+			cost: '',
+			description: '',
+			memo: '',
 		});
 
-		const cost = computed({
+		// 금액
+		const computedCost = computed({
 			get() {
-				return state.cost.trim()
-					? numberWithCommas(state.cost.trim())
-					: state.cost;
+				const { cost } = state;
+
+				return cost.trim() ? numberWithCommas(cost.trim()) : '';
 			},
 
 			set(value) {
 				// NOTE(01-23)
 				// https://stackoverflow.com/questions/10610402/javascript-replace-all-commas-in-a-string
-				state.cost = value.replace(/,/g, '');
+				// state.cost = value.replace(/,/g, '');
 				// https://mi-nya.tistory.com/248
-				// state.cost = value.replace(/[^0-9]+/g, '');
+				state.cost = value.replace(/[^0-9]+/g, '');
 			},
 		});
 
+		//#region 이벤트 핸들러
+		// 금액 keyup 이벤트 핸들러
+		const handleKeyupCost = event => {
+			const value = event.target.value.trim();
+
+			if (!value.length) return;
+
+			const reg = /[^\d,]+$/;
+
+			// 숫자, 콤마를 제외한 문자가 있는지 확인
+			const checkWord = (string = '') => {
+				return reg.test(string);
+			};
+
+			if (checkWord(value)) {
+				state.cost = value.replace(/[^\d]+$/, '');
+			}
+		};
+
+		const handleSubmit = () => {
+			console.log(state);
+		};
+		//#endregion
+
 		return {
-			cost,
+			computedCost,
+			handleKeyupCost,
+			handleSubmit,
+
+			...toRefs(state),
 		};
 	},
 };
@@ -113,7 +159,7 @@ export default {
 	font-size: 1.5rem;
 
 	&__label {
-		flex: 1 1 10%;
+		flex: 1 1 20%;
 		min-width: 0;
 		padding: 1rem;
 		color: $gray-7;
@@ -121,10 +167,11 @@ export default {
 	}
 
 	&__box {
-		flex: 1 1 90%;
+		flex: 1 1 80%;
 		min-width: 0;
 		padding: 1rem;
 		border-bottom: 0.1rem solid $gray-5;
+		transition: border-color 0.2s;
 	}
 }
 
@@ -149,6 +196,18 @@ export default {
 				}
 			}
 		}
+	}
+
+	&__submit {
+		display: block;
+		width: 100%;
+		margin-top: 3rem;
+		padding: 1rem;
+		border-radius: 0.6rem;
+		background-color: $red-color;
+		text-align: center;
+		color: $white-color;
+		font-size: 1.5rem;
 	}
 }
 </style>

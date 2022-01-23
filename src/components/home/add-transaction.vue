@@ -13,7 +13,7 @@
 				<button @click="$emit('close')" class="add-transaction__button">
 					<v-icon>fas fa-times</v-icon>
 				</button>
-				<h2 class="add-transaction__title">수입/지출/이체</h2>
+				<h2 class="add-transaction__title">{{ title }}</h2>
 				<div class="add-transaction__buttons">
 					<button class="add-transaction__button">
 						<v-icon>fas fa-microphone</v-icon>
@@ -91,8 +91,18 @@ export default {
 			return value => (value === transactionType.value ? 'active' : '');
 		});
 
+		// 타이틀
+		const title = computed(() => {
+			return (
+				transactionTypeList.find(
+					item => item.value === transactionType.value,
+				)?.text ?? ''
+			);
+		});
+
 		return {
 			dialog,
+			title,
 
 			transactionTypeList,
 			transactionType,
