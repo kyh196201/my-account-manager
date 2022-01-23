@@ -60,8 +60,8 @@ export default {
 
 		// 지출/소비 시간
 		timestamp: {
-			type: Number,
-			default: 0,
+			type: String,
+			default: '',
 			required: true,
 		},
 	},

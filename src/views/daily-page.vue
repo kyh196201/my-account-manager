@@ -17,6 +17,8 @@
 </template>
 
 <script>
+import { ref } from '@vue/composition-api';
+
 import DailyTransaction from '@/components/daily-page/daily-transaction.vue';
 
 // constants
@@ -24,47 +26,20 @@ import { TRANSACTION_TYPE } from '@/constants';
 
 const data = [
 	{
-		date: '2022.01.15',
-		transactionList: [
-			{
-				category: '식비',
-				method: '현금',
-				description: '붕어빵',
-				cost: 8050,
-				type: TRANSACTION_TYPE.OUTCOME,
-				timestamp: Date.now(),
-			},
-			{
-				category: '식비',
-				method: '카드',
-				description: '점심 식비',
-				cost: 12000,
-				type: TRANSACTION_TYPE.OUTCOME,
-				timestamp: Date.now(),
-			},
-		],
+		timestamp: new Date().toISOString(),
+		category: '식비',
+		method: '현금',
+		description: '붕어빵',
+		cost: 8050,
+		type: TRANSACTION_TYPE.OUTCOME,
 	},
-
 	{
-		date: '2022.01.16',
-		transactionList: [
-			{
-				category: '식비',
-				method: '현금',
-				description: '붕어빵',
-				cost: 8050,
-				type: TRANSACTION_TYPE.INCOME,
-				timestamp: Date.now(),
-			},
-			{
-				category: '식비',
-				method: '카드',
-				description: '점심 식비',
-				cost: 12000,
-				type: TRANSACTION_TYPE.OUTCOME,
-				timestamp: Date.now(),
-			},
-		],
+		timestamp: new Date().toISOString(),
+		category: '식비',
+		method: '카드',
+		description: '점심 식비',
+		cost: 12000,
+		type: TRANSACTION_TYPE.OUTCOME,
 	},
 ];
 
@@ -76,7 +51,30 @@ export default {
 	},
 
 	setup() {
-		const transactionList = data;
+		const transactionList = ref([]);
+
+		// https://stackoverflow.com/questions/46802448/how-do-i-group-items-in-an-array-by-date
+		// this gives an object with dates as keys
+		const groups = data.reduce((groups, transaction) => {
+			const date = transaction.timestamp.split('T')[0];
+			if (!groups[date]) {
+				groups[date] = [];
+			}
+			groups[date].push(transaction);
+			return groups;
+		}, {});
+
+		// Edit: to add it in the array format instead
+		const groupArrays = Object.keys(groups).map(date => {
+			return {
+				date,
+				transactions: groups[date],
+			};
+		});
+
+		transactionList.value = groupArrays;
+
+		console.log(groupArrays);
 
 		return {
 			transactionList,

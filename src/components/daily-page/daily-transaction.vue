@@ -12,7 +12,7 @@
 		<div class="daily-transaction__detail">
 			<ul class="daily-transaction__list">
 				<li
-					v-for="(transaction, index) in transactionList"
+					v-for="(transaction, index) in transactions"
 					:key="`transaction-${index}`"
 				>
 					<Transaction v-bind="transaction"></Transaction>
@@ -49,7 +49,7 @@ export default {
 		},
 
 		// 소비/지출 내역
-		transactionList: {
+		transactions: {
 			type: Array,
 			default: () => [],
 			required: true,
@@ -65,8 +65,8 @@ export default {
 		const totalOutcome = computed(() => {
 			let total = 0;
 
-			for (let i = 0; i < props.transactionList.length; i++) {
-				const transaction = props.transactionList[i];
+			for (let i = 0; i < props.transactions.length; i++) {
+				const transaction = props.transactions[i];
 				if (transaction.type === TRANSACTION_TYPE.OUTCOME) {
 					total += transaction.cost;
 				}
@@ -79,8 +79,8 @@ export default {
 		const totalIncome = computed(() => {
 			let total = 0;
 
-			for (let i = 0; i < props.transactionList.length; i++) {
-				const transaction = props.transactionList[i];
+			for (let i = 0; i < props.transactions.length; i++) {
+				const transaction = props.transactions[i];
 				if (transaction.type === TRANSACTION_TYPE.INCOME) {
 					total += transaction.cost;
 				}
