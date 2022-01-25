@@ -1,73 +1,88 @@
 <template>
-	<form
-		class="transaction-form form"
-		:class="[transactionType]"
-		@submit.prevent="handleSubmit()"
-	>
-		<fieldset class="transaction-form__fieldset">
-			<legend class="sr-only">거래 내역 상세</legend>
+	<div class="transaction-form-wrapper">
+		<form
+			class="transaction-form form"
+			:class="[transactionType]"
+			@submit.prevent="handleSubmit()"
+		>
+			<fieldset class="transaction-form__fieldset">
+				<legend class="sr-only">거래 내역 상세</legend>
 
-			<!-- 날짜 -->
-			<div class="form-control">
-				<label class="form-control__label"> 날짜 </label>
-				<div class="form-control__box">
-					<input type="text" v-model="date" />
+				<!-- 날짜 -->
+				<div class="form-control">
+					<label class="form-control__label"> 날짜 </label>
+					<div class="form-control__box">
+						<input
+							type="text"
+							:value="date"
+							readonly
+							@focus="isDatePickerOpen = true"
+						/>
+					</div>
 				</div>
-			</div>
-			<!-- 자산 -->
-			<div class="form-control">
-				<label class="form-control__label"> 자산 </label>
-				<div class="form-control__box">
-					<input type="text" v-model="method" />
+				<!-- 자산 -->
+				<div class="form-control">
+					<label class="form-control__label"> 자산 </label>
+					<div class="form-control__box">
+						<input type="text" v-model="method" />
+					</div>
 				</div>
-			</div>
-			<!-- 분류 -->
-			<div class="form-control">
-				<label class="form-control__label"> 분류 </label>
-				<div class="form-control__box">
-					<input type="text" v-model="category" />
+				<!-- 분류 -->
+				<div class="form-control">
+					<label class="form-control__label"> 분류 </label>
+					<div class="form-control__box">
+						<input type="text" v-model="category" />
+					</div>
 				</div>
-			</div>
-			<!-- 금액 -->
-			<div class="form-control">
-				<label class="form-control__label"> 금액 </label>
-				<div class="form-control__box">
-					<BaseInput
-						v-model="computedCost"
-						@keyup="handleKeyupCost($event)"
-					></BaseInput>
+				<!-- 금액 -->
+				<div class="form-control">
+					<label class="form-control__label"> 금액 </label>
+					<div class="form-control__box">
+						<BaseInput
+							v-model="computedCost"
+							@keyup="handleKeyupCost($event)"
+						></BaseInput>
+					</div>
 				</div>
-			</div>
-			<!-- 내용 -->
-			<div class="form-control">
-				<label class="form-control__label"> 내용 </label>
-				<div class="form-control__box">
-					<input type="text" v-model="description" />
+				<!-- 내용 -->
+				<div class="form-control">
+					<label class="form-control__label"> 내용 </label>
+					<div class="form-control__box">
+						<input type="text" v-model="description" />
+					</div>
 				</div>
-			</div>
-		</fieldset>
+			</fieldset>
 
-		<fieldset class="transaction-form__fieldset">
-			<legend class="sr-only">거래 내역 부가 정보</legend>
-			<div class="form-control">
-				<label class="form-control__label"> 메모 </label>
-				<div class="form-control__box">
-					<input type="text" v-model="memo" />
+			<fieldset class="transaction-form__fieldset">
+				<legend class="sr-only">거래 내역 부가 정보</legend>
+				<div class="form-control">
+					<label class="form-control__label"> 메모 </label>
+					<div class="form-control__box">
+						<input type="text" v-model="memo" />
+					</div>
 				</div>
-			</div>
-		</fieldset>
+			</fieldset>
 
-		<button type="submit" class="transaction-form__submit">
-			<span>저장하기</span>
-		</button>
-	</form>
+			<button type="submit" class="transaction-form__submit">
+				<span>저장하기</span>
+			</button>
+		</form>
+		<template v-if="isDatePickerOpen">
+			<DatePicker
+				:value="date"
+				@input="handleInputDatePicker($event)"
+				@cancel="closeDatePicker()"
+			></DatePicker>
+		</template>
+	</div>
 </template>
 
 <script>
-import { reactive, computed, toRefs } from '@vue/composition-api';
+import { reactive, computed, toRefs, ref } from '@vue/composition-api';
 
 // components
 import BaseInput from '@/components/common/base-input.vue';
+import DatePicker from '@/components/home/date-picker.vue';
 
 // utils
 import { numberWithCommas } from '@/utils/filter';
@@ -77,6 +92,7 @@ export default {
 
 	components: {
 		BaseInput,
+		DatePicker,
 	},
 
 	props: {
@@ -90,7 +106,7 @@ export default {
 
 	setup() {
 		const state = reactive({
-			date: '',
+			date: '2022-01-24',
 			times: '',
 			category: '',
 			method: '',
@@ -115,6 +131,19 @@ export default {
 				state.cost = value.replace(/[^0-9]+/g, '');
 			},
 		});
+
+		// 데이트피커
+		const isDatePickerOpen = ref(false);
+
+		const openDatePicker = () => (isDatePickerOpen.value = true);
+
+		const closeDatePicker = () => (isDatePickerOpen.value = false);
+
+		const handleInputDatePicker = $event => {
+			state.date = $event;
+
+			closeDatePicker();
+		};
 
 		//#region 이벤트 핸들러
 		// 금액 keyup 이벤트 핸들러
@@ -144,6 +173,12 @@ export default {
 			computedCost,
 			handleKeyupCost,
 			handleSubmit,
+
+			// 데이트피커
+			isDatePickerOpen,
+			openDatePicker,
+			closeDatePicker,
+			handleInputDatePicker,
 
 			...toRefs(state),
 		};
