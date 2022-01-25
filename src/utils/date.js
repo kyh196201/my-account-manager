@@ -8,7 +8,7 @@ const DATE_FORMATS = {
 
 /**
  * 오늘 날짜 구하기
- * @returns Dayjs
+ * @returns {Dayjs}
  */
 function getToday() {
 	return dayjs();
@@ -23,8 +23,13 @@ function validateDate(date) {
 	return !!date && dayjs(date).isValid();
 }
 
-// dayjs 날짜 포맷 변경하기
-function formatDate(date = '', format = 'YYYY-MM-DD') {
+/**
+ * 날짜를 dayjs를 이용해서 포맷 변경
+ * @param {string | number | Date} date
+ * @param {string} format
+ * @returns {boolean}
+ */
+function formatDate(date, format = 'YYYY-MM-DD') {
 	if (!date) return '';
 
 	const dateObj = dayjs(date);
@@ -41,7 +46,7 @@ function formatDate(date = '', format = 'YYYY-MM-DD') {
 function validateHhMm(time = '') {
 	const regex = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/;
 
-	return regex.test(time);
+	return !!time && regex.test(time);
 }
 
 /**
