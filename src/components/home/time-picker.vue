@@ -1,15 +1,18 @@
 <template>
 	<v-dialog ref="dialog" v-model="modal" persistent>
-		<v-date-picker
-			v-model="date"
-			scrollable
+		<v-time-picker
+			v-if="modal"
+			v-model="time"
+			format="ampm"
 			full-width
+			ampm-in-title
+			scrollable
 			:color="themeColorDark"
-			class="date-picker"
+			class="time-picker"
 		>
 			<v-spacer></v-spacer>
 			<v-btn
-				class="date-picker__btn"
+				class="time-picker__btn"
 				text
 				:color="themeColorDark"
 				@click="$emit('cancel')"
@@ -17,30 +20,31 @@
 				취소
 			</v-btn>
 			<v-btn
-				class="date-picker__btn"
+				class="time-picker__btn"
 				text
 				:color="themeColorDark"
-				@click="$emit('input', date)"
+				@click="$emit('input', time)"
 			>
 				확인
 			</v-btn>
-		</v-date-picker>
+		</v-time-picker>
 	</v-dialog>
 </template>
 
 <script>
-import { getToday, validateDate, DATE_FORMATS } from '@/utils/date';
+// utils
+import { validateHhMm, getToday } from '@/utils/date';
 
 export default {
-	name: 'DatePicker',
+	name: 'TimePicker',
 
 	props: {
 		value: {
 			type: String,
-			default: getToday().format(DATE_FORMATS.DATE),
+			default: getToday().format('HH:mm'),
 			required: true,
-			validator(date) {
-				return validateDate(date);
+			validator(time) {
+				return validateHhMm(time);
 			},
 		},
 	},
@@ -48,14 +52,14 @@ export default {
 	data() {
 		return {
 			modal: true,
-			date: '',
+			time: '',
 		};
 	},
 
 	watch: {
 		value: {
 			handler(newValue) {
-				this.date = newValue;
+				this.time = newValue;
 			},
 
 			immediate: true,
@@ -65,13 +69,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.date-picker {
+.time-picker {
 	&__btn {
 		font-size: 1.5rem !important;
 	}
-}
-
-.v-picker {
-	font-size: 1.5rem !important;
 }
 </style>

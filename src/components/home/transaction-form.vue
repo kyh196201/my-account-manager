@@ -12,12 +12,20 @@
 				<div class="form-control">
 					<label class="form-control__label"> 날짜 </label>
 					<div class="form-control__box">
-						<input
-							type="text"
-							:value="date"
-							readonly
-							@focus="isDatePickerOpen = true"
-						/>
+						<div class="transaction-form__date-box">
+							<BaseInput
+								type="text"
+								:value="formattedDate"
+								readonly
+								@focus="openDatePicker()"
+							/>
+							<BaseInput
+								type="text"
+								:value="formattedTime"
+								readonly
+								@focus="openTimePicker()"
+							/>
+						</div>
 					</div>
 				</div>
 				<!-- 자산 -->
@@ -67,12 +75,23 @@
 				<span>저장하기</span>
 			</button>
 		</form>
+
+		<!-- 데이트피커 모달 -->
 		<template v-if="isDatePickerOpen">
 			<DatePicker
 				:value="date"
 				@input="handleInputDatePicker($event)"
 				@cancel="closeDatePicker()"
 			></DatePicker>
+		</template>
+
+		<!-- 타임피커 모달 -->
+		<template v-if="isTimePickerOpen">
+			<TimePicker
+				:value="time"
+				@input="handleInputTimePicker($event)"
+				@cancel="closeTimePicker()"
+			></TimePicker>
 		</template>
 	</div>
 </template>
@@ -83,9 +102,11 @@ import { reactive, computed, toRefs, ref } from '@vue/composition-api';
 // components
 import BaseInput from '@/components/common/base-input.vue';
 import DatePicker from '@/components/home/date-picker.vue';
+import TimePicker from '@/components/home/time-picker.vue';
 
 // utils
 import { numberWithCommas } from '@/utils/filter';
+import { formatDate, getToday, formatTime } from '@/utils/date';
 
 export default {
 	name: 'TransactionForm',
@@ -93,6 +114,7 @@ export default {
 	components: {
 		BaseInput,
 		DatePicker,
+		TimePicker,
 	},
 
 	props: {
@@ -105,9 +127,12 @@ export default {
 	},
 
 	setup() {
+		// 현재 시간 세팅
+		const today = getToday();
+
 		const state = reactive({
-			date: '2022-01-24',
-			times: '',
+			date: today.format('YYYY-MM-DD'),
+			time: today.format('HH:mm'),
 			category: '',
 			method: '',
 			cost: '',
@@ -132,7 +157,7 @@ export default {
 			},
 		});
 
-		// 데이트피커
+		//#region 데이트피커
 		const isDatePickerOpen = ref(false);
 
 		const openDatePicker = () => (isDatePickerOpen.value = true);
@@ -144,6 +169,30 @@ export default {
 
 			closeDatePicker();
 		};
+
+		// 년-월-일 요일로 포맷팅된 날짜
+		const formattedDate = computed(() => {
+			return formatDate(state.date, 'YYYY-MM-DD ddd');
+		});
+		//#endregion
+
+		//#region 타임피커
+		const isTimePickerOpen = ref(false);
+
+		const openTimePicker = () => (isTimePickerOpen.value = true);
+
+		const closeTimePicker = () => (isTimePickerOpen.value = false);
+
+		const handleInputTimePicker = $event => {
+			state.time = $event;
+
+			closeTimePicker();
+		};
+
+		const formattedTime = computed(() => {
+			return formatTime(state.time);
+		});
+		//#endregion
 
 		//#region 이벤트 핸들러
 		// 금액 keyup 이벤트 핸들러
@@ -176,9 +225,17 @@ export default {
 
 			// 데이트피커
 			isDatePickerOpen,
+			formattedDate,
 			openDatePicker,
 			closeDatePicker,
 			handleInputDatePicker,
+
+			// 타임피커
+			isTimePickerOpen,
+			formattedTime,
+			openTimePicker,
+			closeTimePicker,
+			handleInputTimePicker,
 
 			...toRefs(state),
 		};
@@ -230,6 +287,15 @@ export default {
 					}
 				}
 			}
+		}
+	}
+
+	&__date-box {
+		display: flex;
+
+		.base-input {
+			flex: 1 1 50%;
+			font-weight: 500;
 		}
 	}
 
