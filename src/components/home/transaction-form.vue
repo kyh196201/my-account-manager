@@ -32,7 +32,6 @@
 				<div class="form-control">
 					<label class="form-control__label"> 자산 </label>
 					<div class="form-control__box">
-						<!-- <input type="text" v-model="method" /> -->
 						<v-select
 							class="transaction-form__assets"
 							v-model="asset"
@@ -52,7 +51,19 @@
 				<div class="form-control">
 					<label class="form-control__label"> 분류 </label>
 					<div class="form-control__box">
-						<input type="text" v-model="category" />
+						<v-select
+							class="transaction-form__categories"
+							v-model="category"
+							:items="categories"
+							item-text="name"
+							item-value="value"
+							:label="category ? '' : '분류를 선택해주세요.'"
+							hide-details
+							single-line
+							solo
+							flat
+							:color="themeColorDark"
+						></v-select>
 					</div>
 				</div>
 				<!-- 금액 -->
@@ -69,7 +80,7 @@
 				<div class="form-control">
 					<label class="form-control__label"> 내용 </label>
 					<div class="form-control__box">
-						<input type="text" v-model="description" />
+						<BaseInput v-model="description"></BaseInput>
 					</div>
 				</div>
 			</fieldset>
@@ -79,7 +90,7 @@
 				<div class="form-control">
 					<label class="form-control__label"> 메모 </label>
 					<div class="form-control__box">
-						<input type="text" v-model="memo" />
+						<BaseInput v-model="memo"></BaseInput>
 					</div>
 				</div>
 			</fieldset>
@@ -120,7 +131,7 @@ import TimePicker from '@/components/home/time-picker.vue';
 // utils
 import { numberWithCommas } from '@/utils/filter';
 import { formatDate, getToday, formatTime } from '@/utils/date';
-import { ASSETS } from '@/constants';
+import { ASSETS, CATEGORIES } from '@/constants';
 
 export default {
 	name: 'TransactionForm',
@@ -208,8 +219,9 @@ export default {
 		});
 		//#endregion
 
-		//#region assets
+		//#region 자산, 분류
 		const assets = ref(ASSETS.slice());
+		const categories = ref(CATEGORIES.slice());
 		//#endregion
 
 		//#region 이벤트 핸들러
@@ -257,6 +269,9 @@ export default {
 
 			// 자산
 			assets,
+
+			// 분류
+			categories,
 
 			...toRefs(state),
 		};
@@ -320,8 +335,9 @@ export default {
 		}
 	}
 
-	// 자산
-	&__assets {
+	// 자산, 분류
+	&__assets,
+	&__categories {
 		margin: 0;
 		padding: 0;
 

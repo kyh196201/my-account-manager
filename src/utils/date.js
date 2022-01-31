@@ -63,7 +63,10 @@ function formatTime(time = '') {
 
 	const AmPm = hour < 12 ? '오전' : '오후';
 
-	return `${AmPm} ${hour < 12 ? hour : hour - 12}:${min}`;
+	const hours = hour < 12 ? hour : hour - 12;
+	const minutes = min < 10 ? `0${min}` : `${min}`;
+
+	return `${AmPm} ${hours}:${minutes}`;
 }
 
 export {
