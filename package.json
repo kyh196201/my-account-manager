@@ -12,6 +12,7 @@
     "@vue/composition-api": "^1.4.3",
     "core-js": "^3.6.5",
     "dayjs": "^1.10.7",
+    "vee-validate": "^3.4.14",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
     "vuetify": "^2.4.0",

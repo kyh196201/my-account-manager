@@ -1,104 +1,143 @@
 <template>
 	<div class="transaction-form-wrapper">
-		<form
-			class="transaction-form form"
-			:class="[transactionType]"
-			@submit.prevent="handleSubmit()"
-		>
-			<fieldset class="transaction-form__fieldset">
-				<legend class="sr-only">거래 내역 상세</legend>
+		<ValidationObserver v-slot="{ invalid }">
+			<form
+				class="transaction-form form"
+				:class="[transactionType]"
+				@submit.prevent="handleSubmit()"
+			>
+				<fieldset class="transaction-form__fieldset">
+					<legend class="sr-only">거래 내역 상세</legend>
 
-				<!-- 날짜 -->
-				<div class="form-control">
-					<label class="form-control__label"> 날짜 </label>
-					<div class="form-control__box">
-						<div class="transaction-form__date-box">
-							<BaseInput
-								type="text"
-								:value="formattedDate"
-								readonly
-								@focus="openDatePicker()"
-							/>
-							<BaseInput
-								type="text"
-								:value="formattedTime"
-								readonly
-								@focus="openTimePicker()"
-							/>
+					<!-- 날짜 -->
+					<div class="form-control">
+						<label class="form-control__label"> 날짜 </label>
+						<div class="form-control__box">
+							<div class="transaction-form__date-box">
+								<BaseInput
+									type="text"
+									:value="formattedDate"
+									readonly
+									@focus="openDatePicker()"
+								/>
+								<BaseInput
+									type="text"
+									:value="formattedTime"
+									readonly
+									@focus="openTimePicker()"
+								/>
+							</div>
 						</div>
 					</div>
-				</div>
-				<!-- 자산 -->
-				<div class="form-control">
-					<label class="form-control__label"> 자산 </label>
-					<div class="form-control__box">
-						<v-select
-							class="transaction-form__assets"
-							v-model="asset"
-							:items="assets"
-							item-text="name"
-							item-value="value"
-							:label="asset ? '' : '자산을 선택해주세요.'"
-							hide-details
-							single-line
-							solo
-							flat
-							:color="themeColorDark"
-						></v-select>
+					<!-- 자산 -->
+					<ValidationProvider
+						name="asset"
+						rules="required"
+						v-slot="{ errors }"
+						slim
+					>
+						<div
+							class="form-control"
+							:class="errors.length ? 'is-error' : ''"
+						>
+							<label class="form-control__label"> 자산 </label>
+							<div class="form-control__box">
+								<v-select
+									class="transaction-form__assets"
+									v-model="asset"
+									:items="assets"
+									item-text="name"
+									item-value="value"
+									:label="asset ? '' : '자산을 선택해주세요.'"
+									hide-details
+									single-line
+									solo
+									flat
+									:color="themeColorDark"
+								></v-select>
+							</div>
+						</div>
+					</ValidationProvider>
+					<!-- 분류 -->
+					<ValidationProvider
+						name="category"
+						rules="required"
+						v-slot="{ errors }"
+						slim
+					>
+						<div
+							class="form-control"
+							:class="errors.length ? 'is-error' : ''"
+						>
+							<label class="form-control__label"> 분류 </label>
+							<div class="form-control__box">
+								<v-select
+									class="transaction-form__categories"
+									v-model="category"
+									:items="categories"
+									item-text="name"
+									item-value="value"
+									:label="
+										category ? '' : '분류를 선택해주세요.'
+									"
+									hide-details
+									single-line
+									solo
+									flat
+									:color="themeColorDark"
+								></v-select>
+							</div>
+						</div>
+					</ValidationProvider>
+					<!-- 금액 -->
+					<ValidationProvider
+						name="cost"
+						rules="required"
+						slim
+						v-slot="{ errors }"
+					>
+						<div
+							class="form-control"
+							:class="errors.length ? 'is-error' : ''"
+						>
+							<label class="form-control__label"> 금액 </label>
+							<div class="form-control__box cost">
+								<BaseInput
+									v-model="computedCost"
+									@keyup="handleKeyupCost($event)"
+								></BaseInput>
+								<span>원</span>
+							</div>
+						</div>
+					</ValidationProvider>
+					<!-- 내용 -->
+					<div class="form-control">
+						<label class="form-control__label"> 내용 </label>
+						<div class="form-control__box">
+							<BaseInput v-model="description"></BaseInput>
+						</div>
 					</div>
-				</div>
-				<!-- 분류 -->
-				<div class="form-control">
-					<label class="form-control__label"> 분류 </label>
-					<div class="form-control__box">
-						<v-select
-							class="transaction-form__categories"
-							v-model="category"
-							:items="categories"
-							item-text="name"
-							item-value="value"
-							:label="category ? '' : '분류를 선택해주세요.'"
-							hide-details
-							single-line
-							solo
-							flat
-							:color="themeColorDark"
-						></v-select>
-					</div>
-				</div>
-				<!-- 금액 -->
-				<div class="form-control">
-					<label class="form-control__label"> 금액 </label>
-					<div class="form-control__box">
-						<BaseInput
-							v-model="computedCost"
-							@keyup="handleKeyupCost($event)"
-						></BaseInput>
-					</div>
-				</div>
-				<!-- 내용 -->
-				<div class="form-control">
-					<label class="form-control__label"> 내용 </label>
-					<div class="form-control__box">
-						<BaseInput v-model="description"></BaseInput>
-					</div>
-				</div>
-			</fieldset>
+				</fieldset>
 
-			<fieldset class="transaction-form__fieldset">
-				<legend class="sr-only">거래 내역 부가 정보</legend>
-				<div class="form-control">
-					<label class="form-control__label"> 메모 </label>
-					<div class="form-control__box">
-						<BaseInput v-model="memo"></BaseInput>
+				<fieldset class="transaction-form__fieldset">
+					<legend class="sr-only">거래 내역 부가 정보</legend>
+					<div class="form-control">
+						<label class="form-control__label"> 메모 </label>
+						<div class="form-control__box">
+							<BaseInput v-model="memo"></BaseInput>
+						</div>
 					</div>
-				</div>
-			</fieldset>
+				</fieldset>
 
-			<button type="submit" class="transaction-form__submit">
-				<span>저장하기</span>
-			</button>
-		</form>
+				<button
+					type="submit"
+					class="transaction-form__submit"
+					:disabled="invalid"
+				>
+					<span>저장하기</span>
+				</button>
+			</form>
+		</ValidationObserver>
 
 		<!-- 데이트피커 모달 -->
 		<template v-if="isDatePickerOpen">
@@ -300,6 +339,24 @@ export default {
 		padding: 1rem;
 		border-bottom: 0.1rem solid $gray-5;
 		transition: border-color 0.2s;
+
+		&.cost {
+			display: flex;
+			align-items: center;
+		}
+	}
+
+	&.is-error {
+		.form-control {
+			&__label {
+				color: $red-color;
+				font-weight: bolder;
+			}
+
+			&__box {
+				border-color: $red-color;
+			}
+		}
 	}
 }
 
@@ -378,6 +435,11 @@ export default {
 		text-align: center;
 		color: $white-color;
 		font-size: 1.5rem;
+
+		&[disabled] {
+			opacity: 0.5;
+			cursor: not-allowed;
+		}
 	}
 }
 
