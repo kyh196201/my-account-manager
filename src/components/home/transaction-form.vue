@@ -32,7 +32,20 @@
 				<div class="form-control">
 					<label class="form-control__label"> 자산 </label>
 					<div class="form-control__box">
-						<input type="text" v-model="method" />
+						<!-- <input type="text" v-model="method" /> -->
+						<v-select
+							class="transaction-form__assets"
+							v-model="asset"
+							:items="assets"
+							item-text="name"
+							item-value="value"
+							:label="asset ? '' : '자산을 선택해주세요.'"
+							hide-details
+							single-line
+							solo
+							flat
+							:color="themeColorDark"
+						></v-select>
 					</div>
 				</div>
 				<!-- 분류 -->
@@ -107,6 +120,7 @@ import TimePicker from '@/components/home/time-picker.vue';
 // utils
 import { numberWithCommas } from '@/utils/filter';
 import { formatDate, getToday, formatTime } from '@/utils/date';
+import { ASSETS } from '@/constants';
 
 export default {
 	name: 'TransactionForm',
@@ -134,7 +148,7 @@ export default {
 			date: today.format('YYYY-MM-DD'),
 			time: today.format('HH:mm'),
 			category: '',
-			method: '',
+			asset: '',
 			cost: '',
 			description: '',
 			memo: '',
@@ -194,6 +208,10 @@ export default {
 		});
 		//#endregion
 
+		//#region assets
+		const assets = ref(ASSETS.slice());
+		//#endregion
+
 		//#region 이벤트 핸들러
 		// 금액 keyup 이벤트 핸들러
 		const handleKeyupCost = event => {
@@ -236,6 +254,9 @@ export default {
 			openTimePicker,
 			closeTimePicker,
 			handleInputTimePicker,
+
+			// 자산
+			assets,
 
 			...toRefs(state),
 		};
@@ -299,6 +320,38 @@ export default {
 		}
 	}
 
+	// 자산
+	&__assets {
+		margin: 0;
+		padding: 0;
+
+		&.v-input {
+			font-size: 1.5rem;
+		}
+
+		&::v-deep .v-input__control {
+			min-height: auto !important;
+
+			.v-input__slot {
+				padding: 0 !important;
+			}
+
+			.v-label {
+				font-size: 1.3rem;
+			}
+
+			.v-select__selections {
+				input {
+					padding: 0;
+				}
+
+				.v-select__selection--comma {
+					margin: 0;
+				}
+			}
+		}
+	}
+
 	&__submit {
 		display: block;
 		width: 100%;
@@ -310,5 +363,9 @@ export default {
 		color: $white-color;
 		font-size: 1.5rem;
 	}
+}
+
+::v-deep .v-list-item__title {
+	font-size: 1.3rem !important;
 }
 </style>

@@ -5,4 +5,19 @@ const TRANSACTION_TYPE = {
 	TRANSFER: 'transfer',
 };
 
-export { TRANSACTION_TYPE };
+// 자산
+const ASSETS = [
+	{
+		name: '현금',
+		value: 'CASH',
+	},
+	{
+		name: '카드',
+		value: 'CARD',
+	},
+];
+
+// 분류
+const CATEGORIES = [];
+
+export { TRANSACTION_TYPE, ASSETS, CATEGORIES };
