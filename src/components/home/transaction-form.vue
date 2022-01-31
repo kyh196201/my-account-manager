@@ -337,7 +337,7 @@ export default {
 		flex: 1 1 80%;
 		min-width: 0;
 		padding: 1rem;
-		border-bottom: 0.1rem solid $gray-5;
+		border-bottom: 0.15rem solid $gray-5;
 		transition: border-color 0.2s;
 
 		&.cost {
