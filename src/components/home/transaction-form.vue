@@ -175,7 +175,13 @@ import TimePicker from '@/components/home/time-picker.vue';
 
 // utils
 import { numberWithCommas } from '@/utils/filter';
-import { formatDate, getToday, formatTime, getTimestamp } from '@/utils/date';
+import {
+	formatDate,
+	getToday,
+	formatTime,
+	getTimestamp,
+	getFirstAndLastDate,
+} from '@/utils/date';
 import { ASSETS, CATEGORIES } from '@/constants';
 
 export default {
@@ -306,7 +312,6 @@ export default {
 				await store.dispatch(
 					'transactions/ADD_TRANSACTION',
 					transactionData,
-					{ root: true },
 				);
 			} catch (error) {
 				console.error(error);
@@ -315,6 +320,16 @@ export default {
 
 				// 완료 되면 입력 모달 닫기
 				store.commit('CLOSE_TRANSACTION_MODAL');
+
+				const { start, end } = getFirstAndLastDate(
+					store.state.currentDate,
+				);
+
+				// 거래 내역 조회
+				await store.dispatch('transactions/GET_TRANSACTIONS', {
+					start: start.unix() * 1000,
+					end: end.unix() * 1000,
+				});
 			}
 		};
 		//#endregion

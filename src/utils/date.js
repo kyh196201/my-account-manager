@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 
 //	dayjs formats
 const DATE_FORMATS = {
@@ -11,7 +11,7 @@ const DATE_FORMATS = {
  * @returns {Dayjs}
  */
 function getToday() {
-	return dayjs();
+	return dayjs().startOf('date');
 }
 
 /**
@@ -85,6 +85,37 @@ function getTimestamp(date, time) {
 	return dateObj.unix() * 1000;
 }
 
+/**
+ * 입력한 date의 첫 번째 날을 반환
+ * @param {Dayjs} date : Dayjs 객체
+ */
+function getFirstDate(date) {
+	return date.startOf('month').date();
+}
+
+/**
+ * 입력한 date의 마지막 날을 반환
+ * @param {Dayjs} date : Dayjs 객체
+ */
+function getLastDate(date) {
+	return date.endOf('month').date();
+}
+
+/**
+ * 입력한 date의 첫번째 날과 마지막 날을 반환
+ * @param {Dayjs | string} date : Dayjs 객체
+ * @returns {object}
+ */
+function getFirstAndLastDate(date) {
+	const start = dayjs(date).startOf('month');
+	const end = dayjs(date).endOf('month');
+
+	return {
+		start,
+		end,
+	};
+}
+
 export {
 	formatDate,
 	getToday,
@@ -92,5 +123,8 @@ export {
 	validateHhMm,
 	formatTime,
 	getTimestamp,
+	getFirstDate,
+	getLastDate,
+	getFirstAndLastDate,
 	DATE_FORMATS,
 };

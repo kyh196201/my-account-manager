@@ -1,8 +1,8 @@
 <template>
 	<div class="transaction" :class="classname">
-		<span class="transaction__title">{{ category }}</span>
+		<span class="transaction__title">{{ categoryName }}</span>
 		<div class="transaction__detail">
-			<span class="transaction__method">{{ method }}</span>
+			<span class="transaction__method">{{ assetName }}</span>
 			<span class="transaction__desc">{{ description }}</span>
 			<span class="transaction__timestamp"> {{ timeString }} </span>
 		</div>
@@ -18,6 +18,7 @@ import { TRANSACTION_TYPE } from '@/constants';
 
 // utils
 import { numberWithCommas } from '@/utils/filter';
+import { getAssetName, getCategoryName } from '@/utils/helper';
 
 export default {
 	name: 'transaction',
@@ -31,7 +32,7 @@ export default {
 		},
 
 		// 현금, 카드 여부
-		method: {
+		asset: {
 			type: String,
 			default: '',
 			required: true,
@@ -46,8 +47,8 @@ export default {
 
 		// 지출/소비 금액
 		cost: {
-			type: Number,
-			default: 0,
+			type: String,
+			default: '0',
 			required: true,
 		},
 
@@ -60,8 +61,8 @@ export default {
 
 		// 지출/소비 시간
 		timestamp: {
-			type: String,
-			default: '',
+			type: Number,
+			default: Date.now(),
 			required: true,
 		},
 	},
@@ -69,8 +70,16 @@ export default {
 	setup(props) {
 		const $dayjs = inject('$dayjs');
 
+		// 자산 종류
+		const assetName = computed(() => getAssetName(props.asset));
+
+		// 카테고리 종류
+		const categoryName = computed(() => getCategoryName(props.category));
+
 		// 사용 금액
-		const costWithComma = computed(() => numberWithCommas(props.cost));
+		const costWithComma = computed(() =>
+			numberWithCommas(Number(props.cost)),
+		);
 
 		// 오전/오후 시:분
 		const timeString = computed(() => {
@@ -84,6 +93,8 @@ export default {
 		});
 
 		return {
+			assetName,
+			categoryName,
 			costWithComma,
 			timeString,
 			classname,

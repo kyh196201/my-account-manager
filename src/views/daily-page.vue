@@ -51,14 +51,39 @@ export default {
 		DailyTransaction,
 	},
 
+	computed: {
+		transactionList() {
+			const { transactions } = this.$store.state.transactions;
+
+			const groups = transactions.reduce((groups, transaction) => {
+				const date = transaction.date;
+				if (!groups[date]) {
+					groups[date] = [];
+				}
+				groups[date].push(transaction);
+				return groups;
+			}, {});
+
+			const groupArrays = Object.keys(groups).map(date => {
+				return {
+					date,
+					transactions: groups[date],
+				};
+			});
+
+			return groupArrays;
+		},
+	},
+
 	setup() {
-		const transactionList = ref([]);
+		const _transactionList = ref([]);
 
 		// NOTE(01-23)
 		// https://stackoverflow.com/questions/46802448/how-do-i-group-items-in-an-array-by-date
 		// this gives an object with dates as keys
 		const groups = data.reduce((groups, transaction) => {
 			const date = transaction.timestamp.split('T')[0];
+			// const date = transaction.date;
 			if (!groups[date]) {
 				groups[date] = [];
 			}
@@ -74,12 +99,12 @@ export default {
 			};
 		});
 
-		transactionList.value = groupArrays;
+		_transactionList.value = groupArrays;
 
 		console.log(groupArrays);
 
 		return {
-			transactionList,
+			_transactionList,
 		};
 	},
 };

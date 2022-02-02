@@ -2,10 +2,10 @@
 	<div class="daily-transaction">
 		<div class="daily-transaction__summary">
 			<span class="daily-transaction__date"> {{ dateString }} </span>
-			<strong class="daily-transaction__const income">
+			<strong class="daily-transaction__cost income">
 				{{ totalIncome }}원
 			</strong>
-			<strong class="daily-transaction__const outcome">
+			<strong class="daily-transaction__cost outcome">
 				{{ totalOutcome }}원
 			</strong>
 		</div>
@@ -68,7 +68,7 @@ export default {
 			for (let i = 0; i < props.transactions.length; i++) {
 				const transaction = props.transactions[i];
 				if (transaction.type === TRANSACTION_TYPE.OUTCOME) {
-					total += transaction.cost;
+					total += Number(transaction.cost);
 				}
 			}
 
@@ -82,7 +82,7 @@ export default {
 			for (let i = 0; i < props.transactions.length; i++) {
 				const transaction = props.transactions[i];
 				if (transaction.type === TRANSACTION_TYPE.INCOME) {
-					total += transaction.cost;
+					total += Number(transaction.cost);
 				}
 			}
 
@@ -119,7 +119,7 @@ export default {
 		color: $gray-7;
 	}
 
-	&__const {
+	&__cost {
 		flex: 1 1 30%;
 		text-align: right;
 		font-weight: 500;
@@ -132,6 +132,10 @@ export default {
 		&.outcome {
 			color: $red-color;
 		}
+	}
+
+	&__list {
+		padding: 0 !important;
 	}
 }
 </style>
