@@ -72,7 +72,7 @@ function formatTime(time = '') {
 /**
  * timestamp 구하기
  * @param {string} date : YYYY-MM-DD 형태 날짜 데이터
- * @param {*} time : HH:mm 형태 시간 데이터
+ * @param {string} time : HH:mm 형태 시간 데이터
  * @returns {number} : unix timestamp
  */
 function getTimestamp(date, time) {
@@ -90,6 +90,8 @@ function getTimestamp(date, time) {
  * @param {Dayjs} date : Dayjs 객체
  */
 function getFirstDate(date) {
+	if (!(date instanceof Dayjs)) throw new Error('invalid date');
+
 	return date.startOf('month').date();
 }
 
@@ -98,6 +100,7 @@ function getFirstDate(date) {
  * @param {Dayjs} date : Dayjs 객체
  */
 function getLastDate(date) {
+	if (!(date instanceof Dayjs)) throw new Error('invalid date');
 	return date.endOf('month').date();
 }
 
