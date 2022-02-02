@@ -116,7 +116,7 @@ export default {
 .add-transaction {
 	display: flex;
 	flex-direction: column;
-	height: 100vh;
+	height: 100%;
 	background-color: $white-color;
 
 	&__header {

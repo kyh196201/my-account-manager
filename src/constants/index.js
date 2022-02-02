@@ -9,11 +9,11 @@ const TRANSACTION_TYPE = {
 const ASSETS = [
 	{
 		name: '현금',
-		value: 'CASH',
+		value: 'cash',
 	},
 	{
 		name: '카드',
-		value: 'CARD',
+		value: 'card',
 	},
 ];
 
@@ -21,19 +21,19 @@ const ASSETS = [
 const CATEGORIES = [
 	{
 		name: '식비',
-		value: 'FOOD',
+		value: 'food',
 	},
 	{
 		name: '교통/차량',
-		value: 'TRANSPORTATION',
+		value: 'transportation',
 	},
 	{
 		name: '문화생활',
-		value: 'CULTURE',
+		value: 'culture',
 	},
 	{
 		name: '기타',
-		value: 'ETC',
+		value: 'etc',
 	},
 ];
 

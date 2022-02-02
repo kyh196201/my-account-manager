@@ -69,11 +69,28 @@ function formatTime(time = '') {
 	return `${AmPm} ${hours}:${minutes}`;
 }
 
+/**
+ * timestamp 구하기
+ * @param {string} date : YYYY-MM-DD 형태 날짜 데이터
+ * @param {*} time : HH:mm 형태 시간 데이터
+ * @returns {number} : unix timestamp
+ */
+function getTimestamp(date, time) {
+	const dateString = `${date} ${time}`;
+
+	if (!validateDate(dateString)) return Date.now();
+
+	const dateObj = dayjs(dateString);
+
+	return dateObj.unix() * 1000;
+}
+
 export {
 	formatDate,
 	getToday,
 	validateDate,
 	validateHhMm,
 	formatTime,
+	getTimestamp,
 	DATE_FORMATS,
 };

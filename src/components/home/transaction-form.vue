@@ -169,7 +169,7 @@ import TimePicker from '@/components/home/time-picker.vue';
 
 // utils
 import { numberWithCommas } from '@/utils/filter';
-import { formatDate, getToday, formatTime } from '@/utils/date';
+import { formatDate, getToday, formatTime, getTimestamp } from '@/utils/date';
 import { ASSETS, CATEGORIES } from '@/constants';
 
 export default {
@@ -190,7 +190,7 @@ export default {
 		},
 	},
 
-	setup() {
+	setup(props, { root }) {
 		// 현재 시간 세팅
 		const today = getToday();
 
@@ -282,8 +282,15 @@ export default {
 			}
 		};
 
-		const handleSubmit = () => {
-			console.log(state);
+		const handleSubmit = async () => {
+			const { time, date } = state;
+
+			const transactionData = Object.assign({}, state, {
+				timestamp: getTimestamp(date, time),
+				type: props.transactionType,
+			});
+
+			await root.$store.dispatch('ADD_TRANSACTION', transactionData);
 		};
 		//#endregion
 
