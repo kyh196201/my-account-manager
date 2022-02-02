@@ -38,7 +38,7 @@
 			elevation="2"
 			color="white"
 			class="home__plus-btn"
-			@click="modalOpen = true"
+			@click="OPEN_TRANSACTION_MODAL()"
 			:style="{
 				'background-color': themeColorDark,
 			}"
@@ -46,15 +46,16 @@
 			<v-icon small>fas fa-plus</v-icon>
 		</v-btn>
 
+		<!-- 거래 내역 추가/수정 모달 -->
 		<AddTransaction
-			v-if="modalOpen"
-			@close="modalOpen = false"
+			v-if="isTransactionModal"
+			@close="CLOSE_TRANSACTION_MODAL()"
 		></AddTransaction>
 	</section>
 </template>
 
 <script>
-import { ref } from '@vue/composition-api';
+import { mapState, mapMutations } from 'vuex';
 
 // components
 import NavList from '../components/home/nav-list.vue';
@@ -70,13 +71,12 @@ export default {
 		AddTransaction,
 	},
 
-	setup() {
-		// 입력 모달 open
-		const modalOpen = ref(true);
+	computed: {
+		...mapState(['isTransactionModal']),
+	},
 
-		return {
-			modalOpen,
-		};
+	methods: {
+		...mapMutations(['OPEN_TRANSACTION_MODAL', 'CLOSE_TRANSACTION_MODAL']),
 	},
 };
 </script>

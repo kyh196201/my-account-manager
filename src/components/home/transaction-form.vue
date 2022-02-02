@@ -134,7 +134,13 @@
 					class="transaction-form__submit"
 					:disabled="invalid"
 				>
-					<span>저장하기</span>
+					<v-progress-circular
+						v-if="loading"
+						indeterminate
+						color="white"
+						:style="{ width: '2rem', height: '2rem' }"
+					></v-progress-circular>
+					<span v-else>저장하기</span>
 				</button>
 			</form>
 		</ValidationObserver>
@@ -191,6 +197,8 @@ export default {
 	},
 
 	setup(props, { root }) {
+		const store = root.$store;
+
 		// 현재 시간 세팅
 		const today = getToday();
 
@@ -203,6 +211,9 @@ export default {
 			description: '',
 			memo: '',
 		});
+
+		// 로딩
+		const loading = ref(false);
 
 		// 금액
 		const computedCost = computed({
@@ -283,14 +294,28 @@ export default {
 		};
 
 		const handleSubmit = async () => {
-			const { time, date } = state;
+			try {
+				const { time, date } = state;
 
-			const transactionData = Object.assign({}, state, {
-				timestamp: getTimestamp(date, time),
-				type: props.transactionType,
-			});
+				const transactionData = Object.assign({}, state, {
+					timestamp: getTimestamp(date, time),
+					type: props.transactionType,
+				});
 
-			await root.$store.dispatch('ADD_TRANSACTION', transactionData);
+				loading.value = true;
+				await store.dispatch(
+					'transactions/ADD_TRANSACTION',
+					transactionData,
+					{ root: true },
+				);
+			} catch (error) {
+				console.error(error);
+			} finally {
+				loading.value = false;
+
+				// 완료 되면 입력 모달 닫기
+				store.commit('CLOSE_TRANSACTION_MODAL');
+			}
 		};
 		//#endregion
 
@@ -298,6 +323,8 @@ export default {
 			computedCost,
 			handleKeyupCost,
 			handleSubmit,
+
+			loading,
 
 			// 데이트피커
 			isDatePickerOpen,

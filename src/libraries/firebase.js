@@ -24,8 +24,6 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const database = getDatabase(app);
 
-console.log('firebase database', database);
-
 export default app;
 
 export { database, analytics };

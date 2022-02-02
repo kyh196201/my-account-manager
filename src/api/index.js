@@ -17,6 +17,7 @@ const db = getDatabase();
  * @returns {void}
  */
 function addTransaction(transactionData) {
+	// const transactionsRef = ref(db, 'transactions/${userId}');
 	const transactionsRef = ref(db, 'transactions');
 	const key = push(transactionsRef);
 
