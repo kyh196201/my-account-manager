@@ -51,11 +51,31 @@ async function getTransactions(start = 0, end = Date.now()) {
 	);
 
 	const snapshot = await get(transactionsQuery);
-	const transactions = Object.values(snapshot.val());
+	// const transactions = Object.values(snapshot.val());
+	const transactions = [];
+
+	for (const [key, value] of Object.entries(snapshot.val())) {
+		transactions.push({
+			id: key,
+			...value,
+		});
+	}
 
 	// FIXME orderByChild를 이용해서 내림차순 정렬
 	//  내림차순으로 정렬
 	return transactions.sort((a, b) => b.timestamp - a.timestamp);
 }
 
-export { addTransaction, getTransactions };
+/**
+ * 거래 내역 정보 조회하기
+ * @param {string | null} transactionId : 거래 내역 키 값
+ */
+async function getTransaction(transactionId = null) {
+	const transactionsRef = ref(db, `transactions/testUser/${transactionId}`);
+
+	const snapshot = await get(transactionsRef);
+
+	return snapshot.val();
+}
+
+export { addTransaction, getTransactions, getTransaction };

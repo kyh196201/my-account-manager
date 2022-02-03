@@ -11,15 +11,19 @@
 				<!-- TODO 컴포넌트로 분리하기 -->
 				<div class="counter__box">
 					<span class="counter__title">수입</span>
-					<strong class="counter__ammount income">0</strong>
+					<strong class="counter__ammount income">{{
+						totalIncome
+					}}</strong>
 				</div>
 				<div class="counter__box">
 					<span class="counter__title">지출</span>
-					<strong class="counter__ammount outcome">197,200</strong>
+					<strong class="counter__ammount outcome">{{
+						totalOutcome
+					}}</strong>
 				</div>
 				<div class="counter__box">
 					<span class="counter__title">합계</span>
-					<strong class="counter__ammount">-197,200</strong>
+					<strong class="counter__ammount">{{ totalCost }}</strong>
 				</div>
 			</div>
 		</header>
@@ -76,6 +80,21 @@ export default {
 
 	computed: {
 		...mapState(['isTransactionModal', 'currentDate']),
+
+		// 총 수입
+		totalIncome() {
+			return this.$store.getters['transactions/totalIncome'];
+		},
+
+		// 총 지출
+		totalOutcome() {
+			return this.$store.getters['transactions/totalOutcome'];
+		},
+
+		// 총 수입, 지출 합계
+		totalCost() {
+			return this.totalIncome + this.totalOutcome;
+		},
 	},
 
 	methods: {

@@ -1,5 +1,11 @@
-// 거래 내역 스토어 모듈
+/**
+ * 거래 내역 스토어 모듈
+ */
+// api
 import { addTransaction, getTransactions } from '@/api';
+
+// utils
+import { filterIncomes, filterOutcomes } from '@/utils/helper';
 
 export default {
 	namespaced: true,
@@ -8,7 +14,28 @@ export default {
 		// 거래 내역 목록
 		transactions: [],
 	}),
-	getters: {},
+	getters: {
+		// 총 수입
+		totalIncome: state => {
+			const incomes = filterIncomes(state.transactions);
+
+			return incomes.reduce(
+				(amount, transaction) => amount + Number(transaction.cost),
+				0,
+			);
+		},
+
+		// 총 지출
+		totalOutcome: state => {
+			const outcomes = filterOutcomes(state.transactions);
+
+			const totalAmount = outcomes.reduce((amount, transaction) => {
+				return amount + Number(transaction.cost);
+			}, 0);
+
+			return -1 * totalAmount;
+		},
+	},
 	mutations: {
 		SET_TRANSACTIONS(state, transactions = []) {
 			state.transactions = transactions;
