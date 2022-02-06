@@ -7,23 +7,28 @@ $poppins: 'Poppins', sans-serif;
 // Vuetify Globals Vuetify에 자동으로 오버라이드 됨
 $body-font-family: 'Poppins', $noto;
 
+// Size
+$side-padding: 2rem;
+
 // Colors
+// 참고: https://yeun.github.io/open-color
 $white-color: #fff;
 $black-color: #222;
 $red-color: #f03e3e;
 $blue-color: #175cbe;
-$dockbar-color: #e9ecef;
 $gray-7: #495057;
 $gray-6: #868e96;
 $gray-5: #adb5bd;
 $gray-3: #dee2e6;
 $gray-1: #f1f3f5;
+$orange-7: #f76707;
 
-$side-padding: 2rem;
+// 독바
+$dockbar-color: #e9ecef;
 
 // 수입 색상
 $income-color: $blue-color;
 // 지출 색상
-$outcome-color: #f76707;
+$outcome-color: $orange-7;
 // 이체 색상
 $transfer-color: $black-color;

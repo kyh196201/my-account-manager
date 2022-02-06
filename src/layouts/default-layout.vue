@@ -1,22 +1,22 @@
 <template>
 	<div class="container">
-		<app-header></app-header>
+		<AppHeader></AppHeader>
 		<div class="wrapper">
 			<slot></slot>
 		</div>
-		<dock-bar></dock-bar>
+		<DockBar></DockBar>
 	</div>
 </template>
 
 <script>
 // components
-import appHeader from '@/components/app-header.vue';
-import dockBar from '@/components/dock-bar.vue';
+import AppHeader from '@/components/app-header.vue';
+import DockBar from '@/components/dock-bar.vue';
 
 export default {
 	components: {
-		appHeader,
-		dockBar,
+		AppHeader,
+		DockBar,
 	},
 };
 </script>
