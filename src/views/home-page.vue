@@ -98,10 +98,6 @@ export default {
 		...mapMutations(['OPEN_TRANSACTION_MODAL']),
 		...mapActions(['CLOSE_TRANSACTION_MODAL']),
 	},
-
-	created() {
-		this.$store.dispatch('transactions/GET_TRANSACTIONS');
-	},
 };
 </script>
 

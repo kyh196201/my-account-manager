@@ -93,6 +93,9 @@ store.watch(
 	() => {
 		store.dispatch('transactions/GET_TRANSACTIONS');
 	},
+	{
+		immediate: true,
+	},
 );
 
 export default store;
