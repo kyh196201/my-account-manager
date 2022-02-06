@@ -42,6 +42,10 @@ export default {
 		padding: 0;
 	}
 
+	&__item {
+		flex: 1;
+	}
+
 	&__link {
 		color: $gray-7;
 

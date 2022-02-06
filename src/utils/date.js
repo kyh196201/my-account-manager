@@ -127,6 +127,26 @@ function getFirstAndLastDate(date) {
 	};
 }
 
+/**
+ * 날짜에 달 더하기
+ * @param {Dayjs | string | number} date : 날짜
+ * @param {number} value : 더할 month 값
+ * @returns {Dayjs}
+ */
+function addMonth(date, value) {
+	return dayjs(date).add(value, 'month');
+}
+
+/**
+ * 날짜에 년 더하기
+ * @param {Dayjs | string | number} date : 날짜
+ * @param {number} value : 더할 year 값
+ * @returns {Dayjs}
+ */
+function addYear(date, value) {
+	return dayjs(date).add(value, 'year');
+}
+
 export {
 	getNow,
 	getToday,
@@ -140,5 +160,7 @@ export {
 	// format
 	formatTime,
 	formatDate,
+	addMonth,
+	addYear,
 	DATE_FORMATS,
 };
