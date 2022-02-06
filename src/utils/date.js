@@ -113,13 +113,28 @@ function getLastDate(date) {
 }
 
 /**
- * 입력한 date의 첫번째 날과 마지막 날을 반환
+ * 입력한 date(월)의 첫번째 날과 마지막 날을 반환
  * @param {Dayjs | string} date : Dayjs 객체
  * @returns {object}
  */
 function getFirstAndLastDate(date) {
 	const start = dayjs(date).startOf('month');
 	const end = dayjs(date).endOf('month');
+
+	return {
+		start,
+		end,
+	};
+}
+
+/**
+ * 입력한 date(년도)의 첫번째 날과 마지막 날을 반환
+ * @param {Dayjs | string} date : Dayjs 객체
+ * @returns {object}
+ */
+function getYearFirstAndLastDate(date) {
+	const start = dayjs(date).startOf('year');
+	const end = dayjs(date).endOf('year');
 
 	return {
 		start,
@@ -154,6 +169,7 @@ export {
 	getFirstDate,
 	getLastDate,
 	getFirstAndLastDate,
+	getYearFirstAndLastDate,
 	// validate
 	validateDate,
 	validateHhMm,

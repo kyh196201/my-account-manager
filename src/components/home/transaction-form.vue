@@ -187,13 +187,7 @@ import TimePicker from '@/components/home/time-picker.vue';
 
 // utils
 import { numberWithCommas } from '@/utils/filter';
-import {
-	formatDate,
-	getNow,
-	formatTime,
-	getTimestamp,
-	getFirstAndLastDate,
-} from '@/utils/date';
+import { formatDate, getNow, formatTime, getTimestamp } from '@/utils/date';
 import { ASSETS, CATEGORIES } from '@/constants';
 
 export default {
@@ -343,12 +337,7 @@ export default {
 		// FIXME 파이어베이스 onValue 사용
 		// 거래 내역 조회
 		const fetchTransactions = async () => {
-			const { start, end } = getFirstAndLastDate(store.state.currentDate);
-
-			await store.dispatch('transactions/GET_TRANSACTIONS', {
-				start: start.unix() * 1000,
-				end: end.unix() * 1000,
-			});
+			await store.dispatch('transactions/GET_TRANSACTIONS');
 		};
 
 		// 삭제 버튼 클릭 이벤트

@@ -53,7 +53,11 @@ async function getTransactions(start = 0, end = Date.now()) {
 
 	const snapshot = await get(transactionsQuery);
 	// const transactions = Object.values(snapshot.val());
+	const snapshotValue = snapshot.val();
+
 	const transactions = [];
+
+	if (!snapshotValue) return transactions;
 
 	for (const [key, value] of Object.entries(snapshot.val())) {
 		transactions.push({

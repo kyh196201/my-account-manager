@@ -12,6 +12,7 @@ import {
 
 // utils
 import { filterIncomes, filterOutcomes } from '@/utils/helper';
+import { getFirstAndLastDate, getYearFirstAndLastDate } from '@/utils/date';
 
 export default {
 	namespaced: true,
@@ -78,9 +79,19 @@ export default {
 		 * @param {number} params.start
 		 * @param {number} params.end
 		 */
-		async GET_TRANSACTIONS({ commit }, { start, end }) {
+		async GET_TRANSACTIONS({ commit, rootState }) {
 			try {
-				const transactions = await getTransactions(start, end);
+				const { dateType, currentDate } = rootState;
+
+				const { start, end } =
+					dateType === 'month'
+						? getFirstAndLastDate(currentDate)
+						: getYearFirstAndLastDate(currentDate);
+
+				const transactions = await getTransactions(
+					start.unix() * 1000,
+					end.unix() * 1000,
+				);
 
 				commit('SET_TRANSACTIONS', transactions);
 			} catch (error) {

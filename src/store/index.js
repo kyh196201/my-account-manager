@@ -11,7 +11,7 @@ Vue.use(Vuex);
 
 const today = getToday().toISOString();
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
 	state: {
 		// 오늘 날짜
 		todayDate: today,
@@ -83,3 +83,16 @@ export default new Vuex.Store({
 	},
 	modules,
 });
+
+// https://vuex.vuejs.org/kr/api/#watch
+// 현재 날짜 변경 감지
+store.watch(
+	state => {
+		return state.currentDate;
+	},
+	() => {
+		store.dispatch('transactions/GET_TRANSACTIONS');
+	},
+);
+
+export default store;

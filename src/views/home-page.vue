@@ -67,9 +67,6 @@ import NavList from '../components/home/nav-list.vue';
 // modals
 import TransactionDetail from '../components/home/transaction-detail.vue';
 
-// utils
-import { getFirstAndLastDate } from '@/utils/date';
-
 export default {
 	name: 'HomePage',
 
@@ -103,13 +100,7 @@ export default {
 	},
 
 	created() {
-		// TODO 소스 정리 : 공통되는 로직이 transaction-form.vue에서도 쓰임
-		const { start, end } = getFirstAndLastDate(this.currentDate);
-
-		this.$store.dispatch('transactions/GET_TRANSACTIONS', {
-			start: start.unix() * 1000,
-			end: end.unix() * 1000,
-		});
+		this.$store.dispatch('transactions/GET_TRANSACTIONS');
 	},
 };
 </script>

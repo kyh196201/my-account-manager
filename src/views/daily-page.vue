@@ -17,32 +17,7 @@
 </template>
 
 <script>
-import { ref } from '@vue/composition-api';
-
 import DailyTransaction from '@/components/daily-page/daily-transaction.vue';
-
-// constants
-import { TRANSACTION_TYPE } from '@/constants';
-
-const data = [
-	{
-		// NOTE(01-23) https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString
-		timestamp: new Date().toISOString(),
-		category: '식비',
-		method: '현금',
-		description: '붕어빵',
-		cost: 8050,
-		type: TRANSACTION_TYPE.OUTCOME,
-	},
-	{
-		timestamp: new Date().toISOString(),
-		category: '식비',
-		method: '카드',
-		description: '점심 식비',
-		cost: 12000,
-		type: TRANSACTION_TYPE.OUTCOME,
-	},
-];
 
 export default {
 	name: 'DailyPage',
@@ -55,6 +30,7 @@ export default {
 		transactionList() {
 			const { transactions } = this.$store.state.transactions;
 
+			// https://stackoverflow.com/questions/46802448/how-do-i-group-items-in-an-array-by-date
 			const groups = transactions.reduce((groups, transaction) => {
 				const date = transaction.date;
 				if (!groups[date]) {
@@ -73,39 +49,6 @@ export default {
 
 			return groupArrays;
 		},
-	},
-
-	setup() {
-		const _transactionList = ref([]);
-
-		// NOTE(01-23)
-		// https://stackoverflow.com/questions/46802448/how-do-i-group-items-in-an-array-by-date
-		// this gives an object with dates as keys
-		const groups = data.reduce((groups, transaction) => {
-			const date = transaction.timestamp.split('T')[0];
-			// const date = transaction.date;
-			if (!groups[date]) {
-				groups[date] = [];
-			}
-			groups[date].push(transaction);
-			return groups;
-		}, {});
-
-		// Edit: to add it in the array format instead
-		const groupArrays = Object.keys(groups).map(date => {
-			return {
-				date,
-				transactions: groups[date],
-			};
-		});
-
-		_transactionList.value = groupArrays;
-
-		console.log(groupArrays);
-
-		return {
-			_transactionList,
-		};
 	},
 };
 </script>
