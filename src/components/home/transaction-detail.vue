@@ -138,7 +138,6 @@ export default {
 	display: flex;
 	flex-direction: column;
 	height: 100%;
-	background-color: $white-color;
 
 	&__header {
 		display: flex;
@@ -169,6 +168,7 @@ export default {
 	&__content {
 		flex: 1;
 		padding: 2rem;
+		background-color: $white-color;
 	}
 
 	&__tabs {
