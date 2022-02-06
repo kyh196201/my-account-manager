@@ -15,6 +15,14 @@ function getToday() {
 }
 
 /**
+ * 현재 시간 구하기
+ * @returns {Dayjs}
+ */
+function getNow() {
+	return dayjs().startOf('minutes');
+}
+
+/**
  * 올바른 Date인지 검증
  * @param {string | number | Date} date
  * @returns {boolean}
@@ -120,14 +128,17 @@ function getFirstAndLastDate(date) {
 }
 
 export {
-	formatDate,
+	getNow,
 	getToday,
-	validateDate,
-	validateHhMm,
-	formatTime,
 	getTimestamp,
 	getFirstDate,
 	getLastDate,
 	getFirstAndLastDate,
+	// validate
+	validateDate,
+	validateHhMm,
+	// format
+	formatTime,
+	formatDate,
 	DATE_FORMATS,
 };

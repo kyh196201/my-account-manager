@@ -129,19 +129,31 @@
 					</div>
 				</fieldset>
 
-				<button
-					type="submit"
-					class="transaction-form__submit"
-					:disabled="invalid"
-				>
-					<v-progress-circular
-						v-if="loading"
-						indeterminate
-						color="white"
-						:style="{ width: '2rem', height: '2rem' }"
-					></v-progress-circular>
-					<span v-else>저장하기</span>
-				</button>
+				<div class="transaction-form__bottom">
+					<button
+						type="submit"
+						class="transaction-form__btn submit"
+						:disabled="invalid"
+					>
+						<v-progress-circular
+							v-if="loading"
+							indeterminate
+							color="white"
+							:style="{ width: '2rem', height: '2rem' }"
+						></v-progress-circular>
+						<span v-else>저장하기</span>
+					</button>
+					<template v-if="isEditing">
+						<button
+							type="button"
+							class="transaction-form__btn edit"
+							:disabled="invalid"
+							@click.stop="handleDelete()"
+						>
+							<span>삭제하기</span>
+						</button>
+					</template>
+				</div>
 			</form>
 		</ValidationObserver>
 
@@ -177,7 +189,7 @@ import TimePicker from '@/components/home/time-picker.vue';
 import { numberWithCommas } from '@/utils/filter';
 import {
 	formatDate,
-	getToday,
+	getNow,
 	formatTime,
 	getTimestamp,
 	getFirstAndLastDate,
@@ -201,14 +213,38 @@ export default {
 			required: false,
 		},
 	},
+	/**
+	 * 1. isEditing => 수정 여부 : transactionInfo가 있는지 여부로 판단 ✔
+	 * 2. 수정중일 경우 ✔
+	 * 	2.1 스토어에서 현재 ID에 대한 정보 조회 ✔
+	 * 	2.2 state를 현재 스토어에 있는 거래 내역 데이터를 기준으로 합친다. ✔
+	 * 	2.3 transactionType 또한, 거래 내역 타입으로 덮어쓴다. ✔
+	 * 	2.4 삭제, 수정 버튼을 노출한다.
+	 * 	2.5 수정 버튼을 클릭할 경우 수정 API를 실행한다.
+	 * 	2.6 수정이 완료된 경우 거래 내역 정보, ID 데이터를 초기화한다.
+	 * 3. 수정중이 아닐 경우 현재 로직과 동일
+	 */
 
 	setup(props, { root }) {
 		const store = root.$store;
 
-		// 현재 시간 세팅
-		const today = getToday();
+		//#region 스토어
+		// 현재 선택된 거래 내역 정보
+		const transactionInfo = computed(() => {
+			return store.getters['transactions/transactionInfo'];
+		});
 
-		const state = reactive({
+		// 수정 여부
+		const isEditing = computed(
+			() => store.getters['transactions/isEditing'],
+		);
+		//#endregion
+
+		// 현재 시간 세팅
+		const today = getNow();
+
+		// 폼 데이터 기본 값
+		const defaultState = {
 			date: today.format('YYYY-MM-DD'),
 			time: today.format('HH:mm'),
 			category: '',
@@ -216,7 +252,12 @@ export default {
 			cost: '',
 			description: '',
 			memo: '',
-		});
+		};
+
+		// 폼 데이터
+		const state = isEditing.value
+			? reactive(transactionInfo.value)
+			: reactive(defaultState);
 
 		// 로딩
 		const loading = ref(false);
@@ -299,6 +340,35 @@ export default {
 			}
 		};
 
+		// FIXME 파이어베이스 onValue 사용
+		// 거래 내역 조회
+		const fetchTransactions = async () => {
+			const { start, end } = getFirstAndLastDate(store.state.currentDate);
+
+			await store.dispatch('transactions/GET_TRANSACTIONS', {
+				start: start.unix() * 1000,
+				end: end.unix() * 1000,
+			});
+		};
+
+		// 삭제 버튼 클릭 이벤트
+		const handleDelete = async () => {
+			try {
+				if (window.confirm('삭제하시겠습니까?')) {
+					store.dispatch('transactions/REMOVE_TRANSACTIONS', [
+						state.id,
+					]);
+				}
+			} catch (error) {
+				console.error('handleDelete error', error);
+			} finally {
+				// 완료 되면 입력 모달 닫기
+				store.dispatch('CLOSE_TRANSACTION_MODAL');
+				await fetchTransactions();
+			}
+		};
+
+		// submit 이벤트
 		const handleSubmit = async () => {
 			try {
 				const { time, date } = state;
@@ -309,35 +379,44 @@ export default {
 				});
 
 				loading.value = true;
-				await store.dispatch(
-					'transactions/ADD_TRANSACTION',
-					transactionData,
-				);
+
+				// 거래 내역 수정
+				if (isEditing.value) {
+					await store.dispatch(
+						'transactions/UPDATE_TRANSACTION_INFO',
+						{
+							id: state.id,
+							transactionData,
+						},
+					);
+				} else {
+					// 새 거래 내역 추가
+					await store.dispatch(
+						'transactions/ADD_TRANSACTION',
+						transactionData,
+					);
+				}
 			} catch (error) {
 				console.error(error);
 			} finally {
 				loading.value = false;
 
 				// 완료 되면 입력 모달 닫기
-				store.commit('CLOSE_TRANSACTION_MODAL');
-
-				const { start, end } = getFirstAndLastDate(
-					store.state.currentDate,
-				);
-
-				// 거래 내역 조회
-				await store.dispatch('transactions/GET_TRANSACTIONS', {
-					start: start.unix() * 1000,
-					end: end.unix() * 1000,
-				});
+				store.dispatch('CLOSE_TRANSACTION_MODAL');
+				await fetchTransactions();
 			}
 		};
 		//#endregion
 
 		return {
+			//#region 스토어
+			isEditing,
+			//#endregion
+
 			computedCost,
 			handleKeyupCost,
 			handleSubmit,
+			handleDelete,
 
 			loading,
 
@@ -474,16 +553,32 @@ export default {
 		}
 	}
 
-	&__submit {
+	&__bottom {
+		display: flex;
+		align-items: center;
+		margin-top: 3rem;
+	}
+
+	&__btn {
 		display: block;
 		width: 100%;
-		margin-top: 3rem;
 		padding: 1rem;
 		border-radius: 0.6rem;
-		background-color: $red-color;
+		// background-color: $red-color;
 		text-align: center;
-		color: $white-color;
+		// color: $white-color;
 		font-size: 1.5rem;
+
+		&.submit {
+			background-color: $red-color;
+			color: $white-color;
+		}
+
+		&.edit {
+			margin-left: 1rem;
+			border: 0.1rem solid $gray-7;
+			color: $gray-7;
+		}
 
 		&[disabled] {
 			opacity: 0.5;

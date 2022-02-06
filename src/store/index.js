@@ -37,7 +37,17 @@ export default new Vuex.Store({
 			state.isTransactionModal = false;
 		},
 	},
-	actions: {},
+	actions: {
+		// 거래 내역 추가/수정 모달 닫기
+		CLOSE_TRANSACTION_MODAL({ commit, getters }) {
+			commit('CLOSE_TRANSACTION_MODAL');
+
+			// 수정 중 일 경우 거래 내역 상세 정보 초기화
+			if (getters['transactions/isEditing']) {
+				commit('transactions/SET_TRANSACTION_INFO', null);
+			}
+		},
+	},
 	modules,
 	getters: {
 		themeColor(state) {

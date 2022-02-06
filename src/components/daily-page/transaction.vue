@@ -1,5 +1,10 @@
 <template>
-	<div class="transaction" :class="classname">
+	<div
+		class="transaction"
+		:class="classname"
+		:data-id="id"
+		@click.stop="handleClick()"
+	>
 		<span class="transaction__title">{{ categoryName }}</span>
 		<div class="transaction__detail">
 			<span class="transaction__method">{{ assetName }}</span>
@@ -11,7 +16,7 @@
 </template>
 
 <script>
-import { computed, inject } from '@vue/composition-api';
+import { computed } from '@vue/composition-api';
 
 // constants
 import { TRANSACTION_TYPE } from '@/constants';
@@ -19,11 +24,19 @@ import { TRANSACTION_TYPE } from '@/constants';
 // utils
 import { numberWithCommas } from '@/utils/filter';
 import { getAssetName, getCategoryName } from '@/utils/helper';
+import { formatDate } from '@/utils/date';
 
 export default {
 	name: 'transaction',
 
 	props: {
+		// 거래 내역 Id
+		id: {
+			type: String,
+			default: '',
+			required: true,
+		},
+
 		// 소비/지출 카테고리
 		category: {
 			type: String,
@@ -67,9 +80,7 @@ export default {
 		},
 	},
 
-	setup(props) {
-		const $dayjs = inject('$dayjs');
-
+	setup(props, { root: { $store } }) {
 		// 자산 종류
 		const assetName = computed(() => getAssetName(props.asset));
 
@@ -83,7 +94,7 @@ export default {
 
 		// 오전/오후 시:분
 		const timeString = computed(() => {
-			return $dayjs(props.timestamp).format('A hh:mm');
+			return formatDate(props.timestamp, 'A hh:mm');
 		});
 
 		const classname = computed(() => {
@@ -92,12 +103,26 @@ export default {
 				: 'outcome';
 		});
 
+		// 거래 내역 클릭 이벤트
+		const handleClick = async () => {
+			// 거래 내역 정보 조회
+			await $store.dispatch(
+				'transactions/GET_TRANSACTION_INFO',
+				props.id,
+			);
+
+			// 거래 내역 상세 팝업 열기
+			$store.commit('OPEN_TRANSACTION_MODAL');
+		};
+
 		return {
 			assetName,
 			categoryName,
 			costWithComma,
 			timeString,
 			classname,
+
+			handleClick,
 		};
 	},
 };

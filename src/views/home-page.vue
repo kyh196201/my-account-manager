@@ -51,21 +51,21 @@
 		</v-btn>
 
 		<!-- 거래 내역 추가/수정 모달 -->
-		<AddTransaction
+		<TransactionDetail
 			v-if="isTransactionModal"
 			@close="CLOSE_TRANSACTION_MODAL()"
-		></AddTransaction>
+		></TransactionDetail>
 	</section>
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex';
+import { mapState, mapMutations, mapActions } from 'vuex';
 
 // components
 import NavList from '../components/home/nav-list.vue';
 
 // modals
-import AddTransaction from '../components/home/add-transaction.vue';
+import TransactionDetail from '../components/home/transaction-detail.vue';
 
 // utils
 import { getFirstAndLastDate } from '@/utils/date';
@@ -75,7 +75,7 @@ export default {
 
 	components: {
 		NavList,
-		AddTransaction,
+		TransactionDetail,
 	},
 
 	computed: {
@@ -98,7 +98,8 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['OPEN_TRANSACTION_MODAL', 'CLOSE_TRANSACTION_MODAL']),
+		...mapMutations(['OPEN_TRANSACTION_MODAL']),
+		...mapActions(['CLOSE_TRANSACTION_MODAL']),
 	},
 
 	created() {

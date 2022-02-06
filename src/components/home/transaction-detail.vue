@@ -5,27 +5,27 @@
 		hide-overlay
 		transition="dialog-bottom-transition"
 	>
-		<section class="add-transaction">
+		<section class="transaction-detail">
 			<header
-				class="add-transaction__header"
+				class="transaction-detail__header"
 				:style="{ 'background-color': themeColor }"
 			>
-				<button @click="$emit('close')" class="add-transaction__button">
+				<button @click="close()" class="transaction-detail__button">
 					<v-icon>fas fa-times</v-icon>
 				</button>
-				<h2 class="add-transaction__title">{{ title }}</h2>
-				<div class="add-transaction__buttons">
-					<button class="add-transaction__button">
+				<h2 class="transaction-detail__title">{{ title }}</h2>
+				<div class="transaction-detail__buttons">
+					<button class="transaction-detail__button">
 						<v-icon>fas fa-microphone</v-icon>
 					</button>
 				</div>
 			</header>
-			<div class="add-transaction__content">
-				<ul class="add-transaction__tabs">
+			<div class="transaction-detail__content">
+				<ul class="transaction-detail__tabs">
 					<li
 						v-for="(item, index) in transactionTypeList"
 						:key="`nav-item-${index}`"
-						class="add-transaction__tab"
+						class="transaction-detail__tab"
 					>
 						<label
 							class="tab"
@@ -58,14 +58,25 @@ import TransactionForm from './transaction-form.vue';
 import { TRANSACTION_TYPE } from '@/constants';
 
 export default {
-	name: 'AddTransaction',
+	name: 'TransactionDetail',
 
 	components: {
 		TransactionForm,
 	},
 
-	setup() {
+	setup(_, { root: { $store }, emit }) {
 		const dialog = ref(true);
+
+		//#region 스토어 거래 내역 정보
+		const transactionInfo = computed(
+			() => $store.getters['transactions/transactionInfo'],
+		);
+
+		// 수정 중 여부
+		const isEditing = computed(
+			() => $store.getters['transactions/isEditing'],
+		);
+		//#endregion
 
 		// 거래 타입 리스트
 		const transactionTypeList = [
@@ -86,6 +97,10 @@ export default {
 		// 선택된 거래 타입
 		const transactionType = ref(TRANSACTION_TYPE.INCOME);
 
+		if (isEditing.value) {
+			transactionType.value = transactionInfo.value.type;
+		}
+
 		// 탭 active 클래스
 		const tabActiveClass = computed(() => {
 			return value => (value === transactionType.value ? 'active' : '');
@@ -100,6 +115,10 @@ export default {
 			);
 		});
 
+		const close = () => {
+			emit('close');
+		};
+
 		return {
 			dialog,
 			title,
@@ -107,13 +126,15 @@ export default {
 			transactionTypeList,
 			transactionType,
 			tabActiveClass,
+
+			close,
 		};
 	},
 };
 </script>
 
 <style lang="scss" scoped>
-.add-transaction {
+.transaction-detail {
 	display: flex;
 	flex-direction: column;
 	height: 100%;
