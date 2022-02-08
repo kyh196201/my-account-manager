@@ -2,7 +2,7 @@
 const TRANSACTION_TYPE = {
 	INCOME: 'income', // 수입
 	OUTCOME: 'outcome', // 지출
-	TRANSFER: 'transfer',
+	TRANSFER: 'transfer', // 이체
 };
 
 // 자산

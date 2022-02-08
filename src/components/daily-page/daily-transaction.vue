@@ -25,11 +25,9 @@
 <script>
 import { computed, inject, toRefs } from '@vue/composition-api';
 
-// constants
-import { TRANSACTION_TYPE } from '@/constants';
-
 // utils
 import { numberWithCommas } from '@/utils/filter';
+import { filterOutcomes, filterIncomes } from '@/utils';
 
 import Transaction from '@/components/daily-page/transaction.vue';
 
@@ -63,28 +61,22 @@ export default {
 
 		// 총 지출
 		const totalOutcome = computed(() => {
-			let total = 0;
+			const outcomes = filterOutcomes(props.transactions);
 
-			for (let i = 0; i < props.transactions.length; i++) {
-				const transaction = props.transactions[i];
-				if (transaction.type === TRANSACTION_TYPE.OUTCOME) {
-					total += Number(transaction.cost);
-				}
-			}
+			const total = outcomes.reduce((sum, transaction) => {
+				return sum + Number(transaction.cost);
+			}, 0);
 
 			return numberWithCommas(total);
 		});
 
 		// 총 수입
 		const totalIncome = computed(() => {
-			let total = 0;
+			const incomes = filterIncomes(props.transactions);
 
-			for (let i = 0; i < props.transactions.length; i++) {
-				const transaction = props.transactions[i];
-				if (transaction.type === TRANSACTION_TYPE.INCOME) {
-					total += Number(transaction.cost);
-				}
-			}
+			const total = incomes.reduce((sum, transaction) => {
+				return sum + Number(transaction.cost);
+			}, 0);
 
 			return numberWithCommas(total);
 		});

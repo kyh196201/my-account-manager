@@ -11,8 +11,12 @@ import {
 } from '@/api';
 
 // utils
-import { filterIncomes, filterOutcomes } from '@/utils/helper';
-import { getFirstAndLastDate, getYearFirstAndLastDate } from '@/utils/date';
+import {
+	filterIncomes,
+	filterOutcomes,
+	getFirstAndLastDate,
+	getYearFirstAndLastDate,
+} from '@/utils';
 
 export default {
 	namespaced: true,
