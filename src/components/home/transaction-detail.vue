@@ -3,6 +3,8 @@
 		v-model="dialog"
 		fullscreen
 		hide-overlay
+		persistent
+		no-click-animation
 		transition="dialog-bottom-transition"
 	>
 		<section class="transaction-detail">
