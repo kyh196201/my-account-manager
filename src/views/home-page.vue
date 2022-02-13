@@ -35,10 +35,10 @@
 		</v-btn>
 
 		<!-- 거래 내역 추가/수정 모달 -->
-		<TransactionDetail
+		<TransactionModal
 			v-if="isTransactionModal"
 			@close="CLOSE_TRANSACTION_MODAL()"
-		></TransactionDetail>
+		></TransactionModal>
 	</section>
 </template>
 
@@ -50,14 +50,14 @@ import NavList from '../components/home/nav-list.vue';
 import TotalCounter from '@/components/home/total-counter.vue';
 
 // modals
-import TransactionDetail from '../components/home/transaction-detail.vue';
+import TransactionModal from '../components/home/transaction-modal.vue';
 
 export default {
 	name: 'HomePage',
 
 	components: {
 		NavList,
-		TransactionDetail,
+		TransactionModal,
 		TotalCounter,
 	},
 

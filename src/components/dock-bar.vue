@@ -32,6 +32,9 @@ export default {
 <style lang="scss" scoped>
 .dock-bar {
 	padding: 1rem 2rem;
+	// https://wit.nts-corp.com/2019/10/24/5731
+	padding-bottom: calc(env(safe-area-inset-bottom) + 1rem);
+	padding-bottom: calc(constant(safe-area-inset-bottom) + 1rem);
 	background-color: $dockbar-color;
 	text-align: center;
 

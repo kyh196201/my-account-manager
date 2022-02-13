@@ -66,6 +66,21 @@ export default {
 		TransactionForm,
 	},
 
+	created() {
+		// https://jessarcher.com/blog/closing-modals-with-the-back-button-in-a-vue-spa/
+		const unregisterRouterGuard = this.$router.beforeEach(
+			(to, from, next) => {
+				this.$emit('close');
+
+				next(false);
+			},
+		);
+
+		this.$once('hook:destroyed', () => {
+			unregisterRouterGuard();
+		});
+	},
+
 	setup(_, { root: { $store }, emit }) {
 		const dialog = ref(true);
 
