@@ -3,6 +3,7 @@
 		class="base-input"
 		type="text"
 		:value="value"
+		v-bind="$attrs"
 		v-on="inputListeners"
 	/>
 </template>

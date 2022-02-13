@@ -104,6 +104,7 @@
 							<div class="form-control__box cost">
 								<BaseInput
 									v-model="computedCost"
+									type="tel"
 									@keyup="handleKeyupCost($event)"
 								></BaseInput>
 								<span>원</span>
