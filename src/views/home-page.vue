@@ -8,23 +8,7 @@
 
 			<!-- 수입, 지출, 합계 -->
 			<div class="home__counter">
-				<!-- TODO 컴포넌트로 분리하기 -->
-				<div class="counter__box">
-					<span class="counter__title">수입</span>
-					<strong class="counter__ammount income">{{
-						totalIncome
-					}}</strong>
-				</div>
-				<div class="counter__box">
-					<span class="counter__title">지출</span>
-					<strong class="counter__ammount outcome">{{
-						totalOutcome
-					}}</strong>
-				</div>
-				<div class="counter__box">
-					<span class="counter__title">합계</span>
-					<strong class="counter__ammount">{{ totalCost }}</strong>
-				</div>
+				<TotalCounter></TotalCounter>
 			</div>
 		</header>
 		<!-- #endregion -->
@@ -63,6 +47,7 @@ import { mapState, mapMutations, mapActions } from 'vuex';
 
 // components
 import NavList from '../components/home/nav-list.vue';
+import TotalCounter from '@/components/home/total-counter.vue';
 
 // modals
 import TransactionDetail from '../components/home/transaction-detail.vue';
@@ -73,6 +58,7 @@ export default {
 	components: {
 		NavList,
 		TransactionDetail,
+		TotalCounter,
 	},
 
 	computed: {
