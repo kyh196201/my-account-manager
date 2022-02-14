@@ -28,7 +28,12 @@ $dockbar-color: #e9ecef;
 
 // 수입 색상
 $income-color: $blue-color;
+
 // 지출 색상
 $outcome-color: $orange-7;
+
 // 이체 색상
 $transfer-color: $black-color;
+
+$transaction-box-shadow: rgb(0 0 0 / 12%) 0rem 0.1rem 0.3rem,
+rgb(0 0 0 / 24%) 0rem 0.1rem 0.2rem;

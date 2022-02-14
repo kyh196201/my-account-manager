@@ -27,8 +27,17 @@ export default {
 
 		// 선택된 거래 내역 정보
 		transactionInfo: null,
+
+		// 로딩
+		fetches: {
+			transactions: false,
+			transactionInfo: false,
+		},
 	}),
 	getters: {
+		// 거래 내역 리스트
+		transactions: state => state.transactions,
+
 		// 총 수입
 		totalIncome: state => {
 			const incomes = filterIncomes(state.transactions);
@@ -54,6 +63,13 @@ export default {
 
 		// 수정 중 여부
 		isEditing: state => !!state.transactionInfo,
+
+		// 로딩 여부
+		isFetching: state => {
+			return (key = '') => {
+				return state.fetches[key] === true;
+			};
+		},
 	},
 	mutations: {
 		// 거래 내역 리스트 세팅
@@ -64,6 +80,18 @@ export default {
 		// 선택된 거래 내역 정보 세팅
 		SET_TRANSACTION_INFO(state, info = {}) {
 			state.transactionInfo = info;
+		},
+
+		START_FETCHING(state, key = '') {
+			if (undefined !== state.fetches[key]) {
+				state.fetches[key] = true;
+			}
+		},
+
+		END_FETCHING(state, key = '') {
+			if (undefined !== state.fetches[key]) {
+				state.fetches[key] = false;
+			}
 		},
 	},
 	actions: {
@@ -85,6 +113,8 @@ export default {
 		 */
 		async GET_TRANSACTIONS({ commit, rootState }) {
 			try {
+				commit('START_FETCHING', 'transactions');
+
 				const { dateType, currentDate } = rootState;
 
 				const { start, end } =
@@ -101,6 +131,8 @@ export default {
 			} catch (error) {
 				commit('SET_TRANSACTIONS', []);
 				throw error;
+			} finally {
+				commit('END_FETCHING', 'transactions');
 			}
 		},
 
