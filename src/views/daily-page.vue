@@ -18,6 +18,10 @@
 						></DailyTransaction>
 					</li>
 				</ul>
+				<div v-else class="daily-page__empty">
+					<i class="fas fa-folder-open"></i>
+					<p>데이터가 없습니다.</p>
+				</div>
 			</template>
 		</div>
 	</section>
