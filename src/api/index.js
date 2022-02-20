@@ -44,6 +44,8 @@ function addTransaction(transactionData) {
 async function getTransactions(start = 0, end = Date.now()) {
 	const transactionsRef = ref(db, `transactions/testUser`);
 
+	console.log('transactionsRef', transactionsRef);
+
 	const transactionsQuery = query(
 		transactionsRef,
 		startAt(start),

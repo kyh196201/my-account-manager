@@ -1,10 +1,10 @@
 <template>
 	<div class="container">
-		<AppHeader v-if="false"></AppHeader>
+		<AppHeader></AppHeader>
 		<div class="wrapper">
 			<slot></slot>
 		</div>
-		<DockBar v-if="false"></DockBar>
+		<DockBar></DockBar>
 	</div>
 </template>
 

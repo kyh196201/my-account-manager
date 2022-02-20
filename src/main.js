@@ -1,19 +1,20 @@
 import Vue from 'vue';
 import App from './App.vue';
 
-// firebase
+// Firebase init
 import '@/libraries/firebase';
+import '@/libraries/firebase/auth';
 
-import router from './router';
 import store from './store';
+import router from './router';
 import vuetify from './plugins/vuetify';
 import VueCompositionAPI from '@vue/composition-api';
 
-// plugins
+// Plugins
 import VueDayjs from '@/plugins/dayjs';
 import VeeValidate from '@/plugins/vee-validate';
 
-// mixins
+// Mixins
 import globalMixin from '@/mixins/global';
 
 import '@/scss/_index.scss';
