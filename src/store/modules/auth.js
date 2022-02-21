@@ -11,25 +11,29 @@ export default {
 		 * accessToken: string;
 		 * email: stringl
 		 * photoUrl: string;
+		 * uid: string
 		 */
 		user: null,
-		providerId: '', // 'google.com'
+		authProvider: '', // 'google.com'
 	}),
 	getters: {
-		isAuthenticated: state => !!state.user,
+		isAuthenticated: state => !!state.user?.accessToken,
 	},
 	mutations: {
-		SET_USER(state, user) {
-			const { email, accessToken, photoURL } = user;
+		SET_USER(state, userCredential) {
+			const { email, accessToken, photoURL, uid } = userCredential;
 			state.user = {
 				email,
 				accessToken,
 				photoURL,
+				uid,
 			};
 		},
 
-		SET_PROVIDER_ID(state, providerId) {
-			state.providerId = providerId;
+		SET_AUTH_PROVIDER(state, providerData) {
+			const provider = providerData[0];
+
+			state.authProvider = provider.providerId;
 		},
 	},
 	actions: {
@@ -41,8 +45,11 @@ export default {
 		SET_AUTH({ commit }, userCredential) {
 			if (!userCredential) return;
 
-			commit('SET_USER', userCredential.user);
-			commit('SET_PROVIDER_ID', userCredential.providerId);
+			commit('SET_USER', userCredential);
+
+			if (userCredential.providerData?.length) {
+				commit('SET_AUTH_PROVIDER', userCredential.providerData);
+			}
 		},
 	},
 };

@@ -12,17 +12,29 @@
 
 				<ul class="providers__list">
 					<li class="providers__item">
-						<button class="provider-button github" type="button">
+						<button
+							class="provider-button github"
+							type="button"
+							disabled
+						>
 							<span class="provider-button__title">GitHub</span>
 						</button>
 					</li>
 					<li class="providers__item">
-						<button class="provider-button google" type="button">
+						<button
+							class="provider-button google"
+							type="button"
+							@click="GOOGLE_SIGNIN()"
+						>
 							<span class="provider-button__title">Google</span>
 						</button>
 					</li>
 					<li class="providers__item">
-						<button class="provider-button kakao" type="button">
+						<button
+							class="provider-button kakao"
+							type="button"
+							disabled
+						>
 							<span class="provider-button__title">Kakao</span>
 						</button>
 					</li>
@@ -35,6 +47,11 @@
 <script>
 import logo from '@/assets/images/icons8-book.png';
 
+import { createNamespacedHelpers } from 'vuex';
+
+// Vuex Modules
+const { mapActions } = createNamespacedHelpers('auth');
+
 export default {
 	name: 'LoginPage',
 
@@ -42,6 +59,10 @@ export default {
 		return {
 			logo,
 		};
+	},
+
+	methods: {
+		...mapActions(['GOOGLE_SIGNIN']),
 	},
 };
 </script>

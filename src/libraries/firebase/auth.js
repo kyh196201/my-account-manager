@@ -1,9 +1,4 @@
-import {
-	GoogleAuthProvider,
-	getAuth,
-	signInWithRedirect,
-	getRedirectResult,
-} from 'firebase/auth';
+import { GoogleAuthProvider, getAuth, signInWithRedirect } from 'firebase/auth';
 
 import app from '.';
 
@@ -21,23 +16,8 @@ function googleSignIn() {
 	return signInWithRedirect(auth, providers.google);
 }
 
-/**
- * SNS 로그인 리다이렉트 이벤트 핸들러
- * @param {function} handleSuccess
- * @param {function} handleError
- */
-function handleRedirect(handleSuccess, handleError) {
-	getRedirectResult(auth)
-		.then(result => {
-			if (!result) return;
+export { googleSignIn };
 
-			handleSuccess(result);
-		})
-		.catch(error => {
-			handleError(error);
-		});
-}
-
-export { googleSignIn, handleRedirect };
+export { onAuthStateChanged } from 'firebase/auth';
 
 export default auth;

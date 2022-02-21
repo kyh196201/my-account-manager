@@ -1,14 +1,14 @@
 import Vue from 'vue';
 import App from './App.vue';
 
-// Firebase init
-import '@/libraries/firebase';
-import '@/libraries/firebase/auth';
-
 import store from './store';
 import router from './router';
 import vuetify from './plugins/vuetify';
 import VueCompositionAPI from '@vue/composition-api';
+
+// Firebase init
+import '@/libraries/firebase';
+import '@/libraries/firebase/auth';
 
 // Plugins
 import VueDayjs from '@/plugins/dayjs';

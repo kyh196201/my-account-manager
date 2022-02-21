@@ -1,10 +1,10 @@
 <template>
 	<div class="container">
-		<AppHeader></AppHeader>
+		<AppHeader v-if="isAuthenticated"></AppHeader>
 		<div class="wrapper">
 			<slot></slot>
 		</div>
-		<DockBar></DockBar>
+		<DockBar v-if="isAuthenticated"></DockBar>
 	</div>
 </template>
 
@@ -17,6 +17,12 @@ export default {
 	components: {
 		AppHeader,
 		DockBar,
+	},
+
+	computed: {
+		isAuthenticated() {
+			return this.$store.getters['auth/isAuthenticated'];
+		},
 	},
 };
 </script>

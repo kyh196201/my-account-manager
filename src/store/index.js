@@ -91,10 +91,9 @@ store.watch(
 		return state.currentDate;
 	},
 	() => {
+		if (!store.getters['auth/isAuthenticated']) return;
+
 		store.dispatch('transactions/GET_TRANSACTIONS');
-	},
-	{
-		immediate: true,
 	},
 );
 
