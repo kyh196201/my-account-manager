@@ -2,6 +2,9 @@ import { GoogleAuthProvider, getAuth, signInWithRedirect } from 'firebase/auth';
 
 import app from '.';
 
+import store from '@/store';
+import router from '@/router';
+
 const auth = getAuth(app);
 
 // 인증 제공업체
@@ -19,5 +22,25 @@ function googleSignIn() {
 export { googleSignIn };
 
 export { onAuthStateChanged } from 'firebase/auth';
+
+const unsubscribe = auth.onAuthStateChanged(async user => {
+	unsubscribe();
+
+	if (user) {
+		store.dispatch('auth/SET_AUTH', user);
+
+		const { rPath } = router.currentRoute.query;
+
+		await router.push({
+			name: rPath || 'Daily',
+		});
+
+		store.commit('END_LOADING');
+
+		await store.dispatch('transactions/GET_TRANSACTIONS');
+	} else {
+		store.commit('END_LOADING');
+	}
+});
 
 export default auth;

@@ -29,6 +29,9 @@ const store = new Vuex.Store({
 
 		// 거래 내역 추가/수정 모달 open 여부
 		isTransactionModal: false,
+
+		// 메인 로딩(기본 true, onAuthStateChanged에서 false로 변경)
+		loading: true,
 	},
 	getters: {
 		dateType: state => {
@@ -52,6 +55,10 @@ const store = new Vuex.Store({
 		themeColorDark(state) {
 			return state.themeColorDark;
 		},
+
+		isLoading(state) {
+			return state.loading;
+		},
 	},
 
 	mutations: {
@@ -68,6 +75,14 @@ const store = new Vuex.Store({
 		// 현재 날짜 변경
 		SET_CURRENT_DATE(state, date) {
 			state.currentDate = date;
+		},
+
+		START_LOADING(state) {
+			state.loading = true;
+		},
+
+		END_LOADING(state) {
+			state.loading = false;
 		},
 	},
 	actions: {

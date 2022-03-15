@@ -63,10 +63,10 @@ router.beforeEach((to, from, next) => {
 	const isAuthenticated = store.getters['auth/isAuthenticated'];
 
 	if (to.matched.some(({ meta }) => !!meta.requireAuth) && !isAuthenticated) {
+		const nextPath = to ? `/login?rPath=${to.name}` : '/login';
+
 		// 로그인이 되어있지 않으면 로그인 페이지로 리다이렉트
-		next({
-			name: 'Login',
-		});
+		next(nextPath);
 	} else {
 		next();
 	}
