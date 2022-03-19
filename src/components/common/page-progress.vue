@@ -1,6 +1,6 @@
 <template>
 	<div class="page-progress">
-		<v-row class="fill-height" align-content="center" justify="center">
+		<v-row align-content="center" justify="center">
 			<v-col class="text-subtitle-1 text-center" cols="12">
 				<h3 class="page-progress__message">페이지로 이동중입니다.</h3>
 			</v-col>
@@ -30,6 +30,10 @@ export default {
 	left: 0;
 	width: 100%;
 	height: 100vh;
+
+	.row {
+		height: 100%;
+	}
 
 	&__message {
 		margin-bottom: 1rem;

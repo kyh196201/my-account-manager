@@ -1,6 +1,6 @@
 <template>
 	<div class="container">
-		<template v-if="true">
+		<template v-if="isLoading">
 			<PageProgress />
 		</template>
 		<template v-else>
