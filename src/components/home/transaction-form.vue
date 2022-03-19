@@ -348,13 +348,13 @@ export default {
 					store.dispatch('transactions/REMOVE_TRANSACTIONS', [
 						state.id,
 					]);
+
+					// 완료 되면 입력 모달 닫기
+					store.dispatch('CLOSE_TRANSACTION_MODAL');
+					await fetchTransactions();
 				}
 			} catch (error) {
 				console.error('handleDelete error', error);
-			} finally {
-				// 완료 되면 입력 모달 닫기
-				store.dispatch('CLOSE_TRANSACTION_MODAL');
-				await fetchTransactions();
 			}
 		};
 
