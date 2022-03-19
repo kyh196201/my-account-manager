@@ -1,5 +1,5 @@
 <template>
-	<section class="home">
+	<section class="home no-select">
 		<!-- #region 헤더 -->
 		<header class="home__header">
 			<nav class="home__nav" :style="{ 'background-color': themeColor }">
