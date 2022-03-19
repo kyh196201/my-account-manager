@@ -18,6 +18,8 @@ export default {
 	}),
 	getters: {
 		isAuthenticated: state => !!state.user?.accessToken,
+
+		userUID: state => state.user?.uid,
 	},
 	mutations: {
 		SET_USER(state, userCredential) {

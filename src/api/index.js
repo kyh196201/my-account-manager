@@ -25,10 +25,12 @@ const db = getDatabase();
  * @param {string} description : 내용
  * @param {string} memo : 메모
  * @param {string} type : 거래 유형(소비, 지출, 이체)
+ *
+ * @param {string} userUID : 사용자 UID
  * @returns {void}
  */
-function addTransaction(transactionData) {
-	const transactionsRef = ref(db, `transactions/testUser`);
+function addTransaction(transactionData, userUID = '') {
+	const transactionsRef = ref(db, `transactions/${userUID}`);
 	const key = push(transactionsRef);
 
 	return set(key, transactionData);
@@ -38,11 +40,11 @@ function addTransaction(transactionData) {
  * 거래 내역 조회
  * @param {number} start : 검색 기간 처음 날짜(unix timestamp * 1000)
  * @param {number} end : 검색 기간 마지막 날짜(unix timestamp * 1000)
- * @param {string} userId : 사용자 Id
+ * @param {string} userUID : 사용자 UID
  * @returns {array}
  */
-async function getTransactions(start = 0, end = Date.now()) {
-	const transactionsRef = ref(db, `transactions/testUser`);
+async function getTransactions(start = 0, end = Date.now(), userUID = '') {
+	const transactionsRef = ref(db, `transactions/${userUID}`);
 
 	const transactionsQuery = query(
 		transactionsRef,
@@ -57,7 +59,7 @@ async function getTransactions(start = 0, end = Date.now()) {
 
 	const transactions = [];
 
-	if (!snapshotValue) return transactions;
+	if (!snapshotValue) return [];
 
 	for (const [key, value] of Object.entries(snapshot.val())) {
 		transactions.push({
@@ -74,9 +76,10 @@ async function getTransactions(start = 0, end = Date.now()) {
 /**
  * 거래 내역 정보 조회하기
  * @param {string | null} transactionId : 거래 내역 키 값
+ * @param {string} userUID : 사용자 UID
  */
-async function getTransactionInfo(transactionId = null) {
-	const transactionsRef = ref(db, `transactions/testUser/${transactionId}`);
+async function getTransactionInfo(transactionId = null, userUID = '') {
+	const transactionsRef = ref(db, `transactions/${userUID}/${transactionId}`);
 
 	const snapshot = await get(transactionsRef);
 
@@ -96,12 +99,15 @@ async function getTransactionInfo(transactionId = null) {
  * @param {string} description : 내용
  * @param {string} memo : 메모
  * @param {string} type : 거래 유형(소비, 지출, 이체)
+ *
+ * @param {string} userUID : 사용자 UID
  */
 async function updateTransactionInfo(
 	transactionId = null,
 	transactionData = {},
+	userUID = '',
 ) {
-	const transactionsRef = ref(db, `transactions/testUser/${transactionId}`);
+	const transactionsRef = ref(db, `transactions/${userUID}/${transactionId}`);
 
 	return await update(transactionsRef, transactionData);
 }
@@ -109,10 +115,11 @@ async function updateTransactionInfo(
 /**
  * 거래 내역 삭제하기
  * @param {Array.<string>} transactionIds : 삭제할 거래 내역 id 리스트
+ * @param {string} userUID : 사용자 UID
  */
-async function removeTransactions(transactionIds = []) {
+async function removeTransactions(transactionIds = [], userUID = '') {
 	const updates = transactionIds.reduce((updates, id) => {
-		updates[`transactions/testUser/${id}`] = null;
+		updates[`transactions/${userUID}/${id}`] = null;
 		return updates;
 	}, {});
 

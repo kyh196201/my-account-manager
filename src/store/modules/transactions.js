@@ -100,22 +100,28 @@ export default {
 		 * @param {object} context
 		 * @param {object} transactionData
 		 */
-		async ADD_TRANSACTION(context, transactionData) {
-			await addTransaction(transactionData);
+		async ADD_TRANSACTION({ rootGetters }, transactionData) {
+			const userUID = rootGetters['auth/userUID'];
+
+			await addTransaction(transactionData, userUID);
 		},
 
 		/**
 		 * 거래 내역 조회
-		 * @param {object} context
-		 * @param {object} params
-		 * @param {number} params.start
-		 * @param {number} params.end
+		 *
+		 * @param {object} context : vuex context
+		 * @param {string} userUID : 사용자 UID
 		 */
-		async GET_TRANSACTIONS({ commit, rootState }) {
+		async GET_TRANSACTIONS({ commit, rootState, rootGetters }) {
 			try {
 				commit('START_FETCHING', 'transactions');
 
 				const { dateType, currentDate } = rootState;
+
+				const userUID = rootGetters['auth/userUID'];
+
+				if (!userUID)
+					throw new Error(`auth is required user uid = ${userUID}`);
 
 				const { start, end } =
 					dateType === 'month'
@@ -125,11 +131,13 @@ export default {
 				const transactions = await getTransactions(
 					start.unix() * 1000,
 					end.unix() * 1000,
+					userUID,
 				);
 
 				commit('SET_TRANSACTIONS', transactions);
 			} catch (error) {
-				commit('SET_TRANSACTIONS', []);
+				console.error(error);
+
 				throw error;
 			} finally {
 				commit('END_FETCHING', 'transactions');
@@ -141,8 +149,10 @@ export default {
 		 * @param {object} context
 		 * @param {string} id : 거래 내역 id
 		 */
-		async GET_TRANSACTION_INFO({ commit }, id) {
-			const info = await getTransactionInfo(id);
+		async GET_TRANSACTION_INFO({ commit, rootGetters }, id) {
+			const userUID = rootGetters['auth/userUID'];
+
+			const info = await getTransactionInfo(id, userUID);
 
 			commit('SET_TRANSACTION_INFO', {
 				...info,
@@ -158,8 +168,13 @@ export default {
 		 * @param {string} id : 거래 내역 id
 		 * @param {object} transactionData : 거래 내역 데이터
 		 */
-		async UPDATE_TRANSACTION_INFO(context, { id, transactionData }) {
-			await updateTransactionInfo(id, transactionData);
+		async UPDATE_TRANSACTION_INFO(
+			{ rootGetters },
+			{ id, transactionData },
+		) {
+			const userUID = rootGetters['auth/userUID'];
+
+			await updateTransactionInfo(id, transactionData, userUID);
 		},
 
 		/**
@@ -168,8 +183,10 @@ export default {
 		 * @param {object} context
 		 * @param {Array.<string>} transactionIds : 삭제할 거래 내역 id 리스트
 		 */
-		async REMOVE_TRANSACTIONS(context, transactionIds = []) {
-			await removeTransactions(transactionIds);
+		async REMOVE_TRANSACTIONS({ rootGetters }, transactionIds = []) {
+			const userUID = rootGetters['auth/userUID'];
+
+			await removeTransactions(transactionIds, userUID);
 		},
 	},
 };
