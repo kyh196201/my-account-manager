@@ -23,6 +23,7 @@ export { googleSignIn };
 
 export { onAuthStateChanged } from 'firebase/auth';
 
+// 사용자 로그인 여부 체크
 const unsubscribe = auth.onAuthStateChanged(async user => {
 	unsubscribe();
 
