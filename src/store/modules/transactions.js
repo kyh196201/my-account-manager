@@ -38,6 +38,27 @@ export default {
 		// 거래 내역 리스트
 		transactions: state => state.transactions,
 
+		/**
+		 * 날짜별로 그룹핑된 객체
+		 */
+		transactionsGroupByDate: state => {
+			const { transactions } = state;
+
+			if (!transactions.length) return [];
+
+			// https://stackoverflow.com/questions/46802448/how-do-i-group-items-in-an-array-by-date
+			const groups = transactions.reduce((groups, transaction) => {
+				const date = transaction.date;
+				if (!groups[date]) {
+					groups[date] = [];
+				}
+				groups[date].push(transaction);
+				return groups;
+			}, {});
+
+			return groups;
+		},
+
 		// 총 수입
 		totalIncome: state => {
 			const incomes = filterIncomes(state.transactions);
