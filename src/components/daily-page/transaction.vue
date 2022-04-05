@@ -159,7 +159,7 @@ export default {
 	&.income {
 		.transaction {
 			&__cost {
-				color: $blue-color;
+				color: $income-color;
 			}
 		}
 	}
@@ -167,7 +167,7 @@ export default {
 	&.outcome {
 		.transaction {
 			&__cost {
-				color: $red-color;
+				color: $outcome-color;
 			}
 		}
 	}

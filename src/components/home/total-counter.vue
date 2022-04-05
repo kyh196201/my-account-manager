@@ -68,11 +68,11 @@ export default {
 		@include ellipsis(1);
 
 		&.income {
-			color: $blue-color;
+			color: $income-color;
 		}
 
 		&.outcome {
-			color: $red-color;
+			color: $outcome-color;
 		}
 	}
 }
