@@ -5,7 +5,7 @@
 		<div class="calendar-wrapper">
 			<v-calendar
 				class="calendar"
-				v-model="value"
+				:value="currentDate"
 				type="month"
 				:weekday="weekday"
 			>
@@ -41,9 +41,12 @@
 </template>
 
 <script>
+// Vuex
 import { createNamespacedHelpers } from 'vuex';
 
+// Utils
 import { numberWithCommas } from '@/utils';
+import { formatDate } from '@/utils/date';
 
 const transactionsModule = createNamespacedHelpers('transactions');
 
@@ -59,6 +62,13 @@ export default {
 
 	computed: {
 		...transactionsModule.mapGetters(['transactionsGroupByDate']),
+
+		// 현재 날짜
+		currentDate() {
+			const date = this.$store.getters['currentDate'];
+
+			return formatDate(date, 'YYYY-MM-DD');
+		},
 	},
 
 	methods: {
@@ -119,8 +129,9 @@ export default {
 						text-align: right;
 
 						&.more {
-							color: $teal-9;
+							color: $blue-9;
 							text-decoration: underline;
+							font-weight: bolder;
 							cursor: pointer;
 						}
 					}
