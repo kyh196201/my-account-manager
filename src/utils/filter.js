@@ -1,6 +1,8 @@
 // 금액에 콤마 찍기
-function numberWithCommas(x = 0) {
-	return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+function numberWithCommas(x) {
+	if (typeof x === 'number') x = x.toString();
+
+	return x.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
 // 숫자를 제외한 모든 문자 제거
