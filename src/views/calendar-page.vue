@@ -3,6 +3,7 @@
 		<h2 class="sr-only">수입/지출 달력 페이지</h2>
 
 		<div class="calendar-wrapper">
+			<!-- https://vuetifyjs.com/en/api/v-calendar/#props-locale -->
 			<v-calendar
 				class="calendar"
 				:value="currentDate"
