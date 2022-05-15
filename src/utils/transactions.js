@@ -38,4 +38,22 @@ function filterOutcomes(transactions = []) {
 	return transactions.filter(t => isOutcomeType(t.type));
 }
 
-export { isIncomeType, isOutcomeType, filterIncomes, filterOutcomes };
+/**
+ * 거래 내역 총 합계 구하기
+ *
+ * @param {array} transactions 거래 내역
+ * @returns {number} totlaCosts 총 지출
+ */
+function getTotalCost(transactions = []) {
+	return transactions.reduce((total, current) => {
+		return total + parseInt(current.cost, 10);
+	}, 0);
+}
+
+export {
+	isIncomeType,
+	isOutcomeType,
+	filterIncomes,
+	filterOutcomes,
+	getTotalCost,
+};

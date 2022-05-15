@@ -8,29 +8,25 @@
 				:value="currentDate"
 				type="month"
 				:weekday="weekday"
+				locale="ko"
 			>
 				<template v-slot:day="{ date }">
 					<div class="calendar__day">
 						<ul class="calendar__transactions">
 							<li
-								v-for="(item, index) in getTransactionsPerDate(
-									date,
-								).slice(0, 3)"
-								:key="`${date}-${index}`"
+								v-for="(
+									value, key
+								) in getTransactionDataPerDate(date)"
+								:key="`calendar-item-${key}-${date}`"
 								class="calendar__transactions__item"
 							>
 								<span
+									v-if="value"
 									class="calendar__transaction"
-									:class="item.type"
+									:class="key"
 								>
-									{{ addComma(item.cost) }}
+									{{ addComma(value) }}
 								</span>
-							</li>
-							<li
-								v-if="getTransactionsPerDate(date).length > 3"
-								class="calendar__transactions__item more"
-							>
-								더보기
 							</li>
 						</ul>
 					</div>
@@ -47,6 +43,11 @@ import { createNamespacedHelpers } from 'vuex';
 // Utils
 import { numberWithCommas } from '@/utils';
 import { formatDate } from '@/utils/date';
+import {
+	filterIncomes,
+	filterOutcomes,
+	getTotalCost,
+} from '@/utils/transactions';
 
 const transactionsModule = createNamespacedHelpers('transactions');
 
@@ -84,6 +85,25 @@ export default {
 		getTransactionsPerDate(date = '') {
 			return this.transactionsGroupByDate[date] ?? [];
 		},
+
+		getTransactionDataPerDate(date = '') {
+			const data = this.transactionsGroupByDate[date] ?? [];
+
+			const result = {
+				outcome: 0,
+				income: 0,
+			};
+
+			if (data.length) {
+				const outcomes = filterOutcomes(data);
+				const incomes = filterIncomes(data);
+
+				result.outcome = getTotalCost(outcomes);
+				result.income = getTotalCost(incomes);
+			}
+
+			return result;
+		},
 	},
 };
 </script>
@@ -99,6 +119,7 @@ export default {
 				flex: 1;
 				padding: 0.5rem;
 				border-bottom: 1px solid #e0e0e0;
+				font-weight: 500;
 			}
 		}
 
