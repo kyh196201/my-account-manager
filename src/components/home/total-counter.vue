@@ -1,18 +1,18 @@
 <template>
-	<div class="counter">
-		<div class="counter__box">
+	<ul class="counter">
+		<li class="counter__box">
 			<span class="counter__title">수입</span>
 			<strong class="counter__ammount income">{{ income }}</strong>
-		</div>
-		<div class="counter__box">
+		</li>
+		<li class="counter__box">
 			<span class="counter__title">지출</span>
 			<strong class="counter__ammount outcome">{{ outcome }}</strong>
-		</div>
-		<div class="counter__box">
+		</li>
+		<li class="counter__box">
 			<span class="counter__title">합계</span>
 			<strong class="counter__ammount">{{ totalCost }}</strong>
-		</div>
-	</div>
+		</li>
+	</ul>
 </template>
 
 <script>
@@ -48,8 +48,8 @@ export default {
 <style lang="scss" scoped>
 .counter {
 	display: flex;
+	padding: 0;
 	background-color: $white-color;
-	box-shadow: rgba(17, 17, 26, 0.1) 0rem 0.1rem 0rem;
 	border-left: none;
 	border-right: none;
 	color: $black-color;
