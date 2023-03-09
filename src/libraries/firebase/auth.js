@@ -1,4 +1,5 @@
-import { GoogleAuthProvider, getAuth, signInWithRedirect } from 'firebase/auth';
+import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
+// signInWithRedirect
 
 import app from '.';
 
@@ -15,18 +16,17 @@ const providers = {
 auth.languageCode = 'it';
 
 // 구글 로그인
-function googleSignIn() {
-	return signInWithRedirect(auth, providers.google);
+export function googleSignIn() {
+	return signInWithPopup(auth, providers.google);
 }
 
-export { googleSignIn };
-
-export { onAuthStateChanged } from 'firebase/auth';
+// 로그아웃
+export function signOut() {
+	return auth.signOut();
+}
 
 // 사용자 로그인 여부 체크
 const unsubscribe = auth.onAuthStateChanged(async user => {
-	unsubscribe();
-
 	if (user) {
 		store.dispatch('auth/SET_AUTH', user);
 
@@ -39,6 +39,7 @@ const unsubscribe = auth.onAuthStateChanged(async user => {
 		store.commit('END_LOADING');
 
 		await store.dispatch('transactions/GET_TRANSACTIONS');
+		unsubscribe();
 	} else {
 		store.commit('END_LOADING');
 	}

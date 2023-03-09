@@ -1,7 +1,7 @@
 /**
  * 사용자 인증 스토어 모듈
  */
-import { googleSignIn } from '@/libraries/firebase/auth';
+import { googleSignIn, signOut } from '@/libraries/firebase/auth';
 
 export default {
 	namespaced: true,
@@ -37,6 +37,11 @@ export default {
 
 			state.authProvider = provider.providerId;
 		},
+
+		SIGN_OUT(state) {
+			state.user = null;
+			state.authProvider = '';
+		},
 	},
 	actions: {
 		// 구글 로그인
@@ -52,6 +57,12 @@ export default {
 			if (userCredential.providerData?.length) {
 				commit('SET_AUTH_PROVIDER', userCredential.providerData);
 			}
+		},
+
+		SIGN_OUT() {
+			return signOut().catch(() => {
+				Promise.reject(new Error('sign out failed'));
+			});
 		},
 	},
 };

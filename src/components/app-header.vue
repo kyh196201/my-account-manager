@@ -10,7 +10,15 @@
 				<DateNavigator></DateNavigator>
 			</div>
 			<nav class="header__nav">
-				<ul class="header__icons">
+				<button
+					v-if="isAuthenticated"
+					type="button"
+					class="header__signout"
+					@click="handleSignout()"
+				>
+					<span>로그아웃</span>
+				</button>
+				<!-- <ul class="header__icons">
 					<li class="header__icon">
 						<v-btn icon>
 							<v-icon small color="white">fas fa-search</v-icon>
@@ -21,7 +29,7 @@
 							<v-icon small color="white">fas fa-filter</v-icon>
 						</v-btn>
 					</li>
-				</ul>
+				</ul> -->
 			</nav>
 		</div>
 		<!-- <div>
@@ -34,11 +42,42 @@
 <script>
 import DateNavigator from '@/components/common/date-navigator.vue';
 
+import { createNamespacedHelpers } from 'vuex';
+
+const { mapActions } = createNamespacedHelpers('auth');
+
 export default {
 	name: 'AppHeader',
 
 	components: {
 		DateNavigator,
+	},
+
+	computed: {
+		isAuthenticated() {
+			return this.$store.getters['auth/isAuthenticated'];
+		},
+	},
+
+	methods: {
+		...mapActions(['SIGN_OUT']),
+
+		async handleSignout() {
+			try {
+				await this.SIGN_OUT();
+
+				this.$store.commit('auth/SIGN_OUT');
+
+				window.location.reload();
+
+				// TODO: 재 로그인 안됨
+				// this.$router.push('/login');
+			} catch (error) {
+				if (error instanceof Error) {
+					alert(error.message);
+				}
+			}
+		},
 	},
 };
 </script>
@@ -56,6 +95,13 @@ export default {
 	// #region nav
 	&__nav {
 		flex: 1;
+		display: flex;
+		justify-content: flex-end;
+	}
+
+	&__signout {
+		color: $black-color;
+		font-weight: bold;
 	}
 
 	&__icons {
